@@ -8,3 +8,12 @@ services:
       - "3000:3000"
     volumes:
       - .:/usr/api
+  
+  postgres:
+    image: postgres:11.2-alpine
+    ports: 
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: helloworld
+      POSTGRES_USER: postgres
+      POSTGRES_PASS: root
