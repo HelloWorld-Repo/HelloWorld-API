@@ -6,6 +6,11 @@ class AppController {
 
     this.middlewares();
     this.routes();
+
+    this.express.get("/", (req, res) => {
+      res.send("Hi Docker!!!");
+    });
+    
   }
 
   middlewares() {
