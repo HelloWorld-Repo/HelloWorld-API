@@ -1,5 +1,8 @@
 start:
-	docker-compose start -d
+	docker-compose up -d
+
+start-dev:
+	docker-compose up
 
 stop:
 	docker-compose stop
@@ -14,4 +17,10 @@ bash-bd:
 	docker-compose exec postgres bash
 
 migrate:
-	docker-compose exec api npx sequelize db:migrate
+	docker-compose exec api npx sequelize-cli db:migrate
+
+undo-migrate:
+	docker-compose exec api npx sequelize-cli db:migrate:undo
+
+stop-local-postgres:
+	pg_ctl -D "C:\Program Files\PostgreSQL\13\data" stop
