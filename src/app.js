@@ -1,4 +1,5 @@
 const express = require('express');
+const routes = require('./routes');
 
 class AppController {
   constructor() {
@@ -6,11 +7,6 @@ class AppController {
 
     this.middlewares();
     this.routes();
-
-    this.express.get("/", (req, res) => {
-      res.send("Hi Docker!!!");
-    });
-    
   }
 
   middlewares() {
@@ -18,7 +14,7 @@ class AppController {
   }
 
   routes() {
-    this.express.use(require('./routes'));
+    this.express.use(routes);
   }
 }
 

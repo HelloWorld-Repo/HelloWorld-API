@@ -9,6 +9,8 @@
     "ecmaVersion": 12
   },
   "rules": {
-    "implicit-arrow-linebreak": ["error", "beside"]
+    "implicit-arrow-linebreak": ["error", "beside"],
+    "linebreak-style": ["error", "windows"],
+    "class-methods-use-this": "off"
   }
 }
