@@ -1,10 +1,13 @@
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
     'User',
     {
       email: { primaryKey: true, type: DataTypes.STRING },
       name: DataTypes.STRING,
-      level: DataTypes.INTEGER,
+      level: DataTypes.VIRTUAL,
       birthday: DataTypes.DATEONLY,
       password_hash: DataTypes.STRING,
       is_admin: DataTypes.BOOLEAN,
@@ -21,8 +24,16 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       tableName: 'USER',
-    }
+    },
   );
+
+  User.prototype.checkPassword = function (password) {
+    return bcrypt.compare(password, this.password_hash);
+  };
+
+  User.prototype.generateToken = function () {
+    return jwt.sign({ id: this.email }, process.env.SECRET_JWT);
+  };
 
   return User;
 };

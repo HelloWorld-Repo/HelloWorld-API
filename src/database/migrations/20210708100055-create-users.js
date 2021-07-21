@@ -11,10 +11,6 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    level: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-    },
     birthday: {
       type: Sequelize.DATEONLY,
       allowNull: false,

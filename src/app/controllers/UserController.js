@@ -13,7 +13,7 @@ class UserController {
         password_hash: criptedPass,
       });
 
-      res.status(200).json({
+      return res.status(200).json({
         error: false,
         data: {
           email: user.email,
@@ -27,33 +27,39 @@ class UserController {
       });
     } catch (error) {
       if (error.name === 'SequelizeUniqueConstraintError') {
-        res.status(409).json({
+        return res.status(409).json({
           error: true,
           message: 'Já existe uma conta com esse e-mail',
         });
-      } else if (error.name === 'SequelizeDatabaseError') {
+      }
+
+      if (error.name === 'SequelizeDatabaseError') {
         if (!req.body.name) {
-          res.status(400).json({
+          return res.status(400).json({
             error: true,
             message: 'O nome é obrigatório',
           });
-        } else if (!req.body.email) {
+        }
+
+        if (!req.body.email) {
           res.status(400).json({
             error: true,
             message: 'O e-mail é obrigatório',
           });
-        } else if (!req.body.birthday) {
+        }
+
+        if (!req.body.birthday) {
           res.status(400).json({
             error: true,
             message: 'A data de aniversário é obrigatório',
           });
         }
-      } else {
-        res.status(error.status || 500).json({
-          error: true,
-          message: error.message,
-        });
       }
+
+      return res.status(error.status || 500).json({
+        error: true,
+        message: error.message,
+      });
     }
   }
 }

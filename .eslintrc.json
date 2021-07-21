@@ -11,6 +11,7 @@
   "rules": {
     "implicit-arrow-linebreak": ["error", "beside"],
     "linebreak-style": ["error", "windows"],
-    "class-methods-use-this": "off"
+    "class-methods-use-this": "off",
+    "func-names": "off"
   }
 }
