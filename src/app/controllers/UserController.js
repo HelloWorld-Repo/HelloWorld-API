@@ -27,10 +27,27 @@ class UserController {
       });
     } catch (error) {
       if (error.name === 'SequelizeUniqueConstraintError') {
-        res.status(error.status || 500).json({
+        res.status(409).json({
           error: true,
           message: 'Já existe uma conta com esse e-mail',
         });
+      } else if (error.name === 'SequelizeDatabaseError') {
+        if (!req.body.name) {
+          res.status(400).json({
+            error: true,
+            message: 'O nome é obrigatório',
+          });
+        } else if (!req.body.email) {
+          res.status(400).json({
+            error: true,
+            message: 'O e-mail é obrigatório',
+          });
+        } else if (!req.body.birthday) {
+          res.status(400).json({
+            error: true,
+            message: 'A data de aniversário é obrigatório',
+          });
+        }
       } else {
         res.status(error.status || 500).json({
           error: true,
