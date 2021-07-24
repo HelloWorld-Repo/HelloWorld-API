@@ -4,31 +4,42 @@ class SessionController {
   async login(req, res) {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ where: { email } });
+    try {
+      const user = await User.findOne({ where: { email } });
 
-    if (!user) {
-      return res.status(401).json({
-        error: true,
-        message: 'E-mail não cadastrado',
+      if (!user) {
+        return res.status(401).json({
+          error: true,
+          message: 'E-mail não cadastrado',
+        });
+      }
+
+      if (!(await user.checkPassword(password))) {
+        return res.status(401).json({
+          error: true,
+          message: 'Senha incorreta',
+        });
+      }
+
+      return res.status(200).json({
+        error: false,
+        data: {
+          user,
+          token: user.generateToken(),
+        },
       });
-    }
-
-    if (!(await user.checkPassword(password))) {
-      return res.status(401).json({
+    } catch (error) {
+      return res.status(500).json({
         error: true,
-        message: 'Senha incorreta',
+        message: error.message,
       });
     }
 
     // TODO: recuperar nível do usuário
+  }
 
-    return res.status(200).json({
-      error: false,
-      data: {
-        user,
-        token: user.generateToken(),
-      },
-    });
+  async jwtTest(req, res) {
+    return res.status(200).send();
   }
 }
 
