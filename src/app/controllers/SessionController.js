@@ -24,7 +24,15 @@ class SessionController {
       return res.status(200).json({
         error: false,
         data: {
-          user,
+          user: {
+            email: user.email,
+            name: user.name,
+            birthday: user.birthday,
+            isAdmin: user.is_admin,
+            isStudant: user.is_studant,
+            isFirstContact: user.is_first_contact,
+            level: user.level,
+          },
           token: user.generateToken(),
         },
       });
