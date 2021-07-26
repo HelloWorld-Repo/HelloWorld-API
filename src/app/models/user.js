@@ -17,8 +17,8 @@ module.exports = (sequelize, DataTypes) => {
         field: 'is_admin',
         type: DataTypes.BOOLEAN,
       },
-      isStudant: {
-        field: 'is_studant',
+      isStudent: {
+        field: 'is_student',
         type: DataTypes.BOOLEAN,
       },
       isFirstContact: {

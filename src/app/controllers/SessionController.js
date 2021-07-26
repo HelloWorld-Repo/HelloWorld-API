@@ -29,7 +29,7 @@ class SessionController {
             name: user.name,
             birthday: user.birthday,
             isAdmin: user.isAdmin,
-            isStudant: user.isStudant,
+            isStudent: user.isStudent,
             isFirstContact: user.isFirstContact,
             level: user.level,
           },
