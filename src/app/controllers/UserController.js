@@ -10,7 +10,7 @@ class UserController {
       const user = await User.create({
         ...req.body,
         level: 0,
-        password_hash: criptedPass,
+        passwordHash: criptedPass,
       });
 
       return res.status(200).json({
@@ -19,9 +19,9 @@ class UserController {
           email: user.email,
           name: user.name,
           birthday: user.birthday,
-          isAdmin: user.is_admin,
-          isStudant: user.is_studant,
-          isFirstContact: user.is_first_contact,
+          isAdmin: user.isAdmin,
+          isStudant: user.isStudant,
+          isFirstContact: user.isFirstContact,
           level: user.level,
         },
       });
@@ -51,7 +51,7 @@ class UserController {
         if (!req.body.birthday) {
           res.status(400).json({
             error: true,
-            message: 'A data de aniversário é obrigatório',
+            message: 'A data de aniversário é obrigatória',
           });
         }
       }

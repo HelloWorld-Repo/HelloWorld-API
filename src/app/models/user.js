@@ -9,10 +9,22 @@ module.exports = (sequelize, DataTypes) => {
       name: DataTypes.STRING,
       level: DataTypes.VIRTUAL,
       birthday: DataTypes.DATEONLY,
-      password_hash: DataTypes.STRING,
-      is_admin: DataTypes.BOOLEAN,
-      is_studant: DataTypes.BOOLEAN,
-      is_first_contact: DataTypes.BOOLEAN,
+      passwordHash: {
+        field: 'password_hash',
+        type: DataTypes.STRING,
+      },
+      isAdmin: {
+        field: 'is_admin',
+        type: DataTypes.BOOLEAN,
+      },
+      isStudant: {
+        field: 'is_studant',
+        type: DataTypes.BOOLEAN,
+      },
+      isFirstContact: {
+        field: 'is_first_contact',
+        type: DataTypes.BOOLEAN,
+      },
       createdAt: {
         field: 'created_at',
         type: DataTypes.DATE,
