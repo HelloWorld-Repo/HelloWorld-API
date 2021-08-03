@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   User.prototype.checkPassword = function (password) {
-    return bcrypt.compare(password, this.password_hash);
+    return bcrypt.compare(password, this.passwordHash);
   };
 
   User.prototype.generateToken = function () {
