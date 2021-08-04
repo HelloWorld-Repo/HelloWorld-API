@@ -78,6 +78,22 @@ class ModuleController {
       });
     }
   }
+
+  async list(req, res) {
+    try {
+      const modules = await Module.findAll();
+
+      return res.status(200).json({
+        error: false,
+        data: modules,
+      });
+    } catch (error) {
+      return res.status(error.statusCode || 500).json({
+        error: true,
+        message: 'Erro ao buscar módulos',
+      });
+    }
+  }
 }
 
 module.exports = new ModuleController();

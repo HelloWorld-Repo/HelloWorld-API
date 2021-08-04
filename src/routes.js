@@ -11,7 +11,7 @@ routes.post('/login', SessionController.login);
 routes.post('/register', UserController.register);
 
 routes.use(authMiddleware);
-routes.get('/modules', (req, res) => res.status(200).send());
+routes.get('/modules', ModuleController.list);
 
 routes.use(adminMiddleware);
 routes.post('/module', ModuleController.create);
