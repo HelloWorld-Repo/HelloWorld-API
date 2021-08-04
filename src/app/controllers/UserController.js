@@ -5,6 +5,13 @@ const { User } = require('../models');
 class UserController {
   async register(req, res) {
     try {
+      if (!req.body?.password) {
+        return res.status(400).json({
+          error: true,
+          message: 'A senha não foi informada',
+        });
+      }
+
       const criptedPass = await bcrypt.hash(req.body.password, 8);
 
       const user = await User.create({
@@ -33,27 +40,18 @@ class UserController {
         });
       }
 
-      if (error.name === 'SequelizeDatabaseError') {
-        if (!req.body.name) {
-          return res.status(400).json({
-            error: true,
-            message: 'O nome é obrigatório',
-          });
-        }
+      if (!req.body.email) {
+        return res.status(400).json({
+          error: true,
+          message: 'O e-mail é obrigatório',
+        });
+      }
 
-        if (!req.body.email) {
-          res.status(400).json({
-            error: true,
-            message: 'O e-mail é obrigatório',
-          });
-        }
-
-        if (!req.body.birthday) {
-          res.status(400).json({
-            error: true,
-            message: 'A data de aniversário é obrigatória',
-          });
-        }
+      if (req.body.isAdmin == null || typeof req.body.isAdmin === 'undefined') {
+        return res.status(400).json({
+          error: true,
+          message: 'Informe se o usuário é administrador do sistema ou não',
+        });
       }
 
       return res.status(error.status || 500).json({

@@ -23,6 +23,8 @@ module.exports = (sequelize, DataTypes) => {
       isAdmin: {
         field: 'is_admin',
         type: DataTypes.BOOLEAN,
+        required: true,
+        allowNull: false,
       },
       isStudent: {
         field: 'is_student',
