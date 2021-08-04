@@ -16,6 +16,8 @@ routes.use(authMiddleware);
 
 routes.get('/modules', ModuleController.list);
 
+routes.get('/chapters', ChapterController.list);
+
 // These Routes needs admin athentication
 routes.use(adminMiddleware);
 

@@ -56,12 +56,17 @@ class ChapterController {
   }
 
   async update(req, res) {
-    const { id, position, title } = req.body;
+    const {
+      id,
+      position,
+      title,
+      moduleId,
+    } = req.body;
 
     if (!id) {
       return res.status(412).json({
         error: true,
-        message: 'O ID do módulo é obrigatório',
+        message: 'Informe o identificador do capítulo',
       });
     }
 
@@ -71,23 +76,38 @@ class ChapterController {
       if (!chapter) {
         return res.status(404).json({
           error: true,
-          message: 'Módulo não encontrado',
+          message: 'Capítulo não encontrado',
         });
       }
 
-      chapter.title = title;
-      chapter.position = position;
+      if (title) chapter.title = title;
+      if (position) chapter.position = position;
+      if (moduleId) chapter.moduleId = moduleId;
 
-      chapter.save();
+      await chapter.save();
 
       return res.status(200).json({
         error: false,
         data: chapter,
       });
     } catch (error) {
+      if (error.name === 'SequelizeForeignKeyConstraintError') {
+        return res.status(404).json({
+          error: true,
+          message: 'Esse módulo não existe',
+        });
+      }
+
+      if (error.name === 'SequelizeUniqueConstraintError') {
+        return res.status(404).json({
+          error: true,
+          message: 'Já existe um capítulo nessa posição desse módulo',
+        });
+      }
+
       return res.status(500).json({
         error: true,
-        message: 'Erro ao atualizar módulo',
+        message: 'Erro ao atualizar capítulo',
       });
     }
   }
@@ -103,7 +123,7 @@ class ChapterController {
     } catch (error) {
       return res.status(error.statusCode || 500).json({
         error: true,
-        message: 'Erro ao buscar módulos',
+        message: 'Erro ao buscar capítulos',
       });
     }
   }

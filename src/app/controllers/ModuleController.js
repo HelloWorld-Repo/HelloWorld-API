@@ -63,7 +63,7 @@ class ModuleController {
       if (title) module.title = title;
       if (position) module.position = position;
 
-      module.save();
+      await module.save();
 
       return res.status(200).json({
         error: false,
