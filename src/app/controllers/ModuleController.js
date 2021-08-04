@@ -12,27 +12,25 @@ class ModuleController {
         data: module,
       });
     } catch (error) {
+      if (!req.body.position) {
+        return res.status(400).json({
+          error: true,
+          message: 'A posição do módulo é obrigatória',
+        });
+      }
+
+      if (!req.body.title) {
+        res.status(400).json({
+          error: true,
+          message: 'O nome do módulo é obrigatório',
+        });
+      }
+
       if (error.name === 'SequelizeUniqueConstraintError') {
         return res.status(409).json({
           error: true,
           message: 'Já existe um módulo nessa posição',
         });
-      }
-
-      if (error.name === 'SequelizeDatabaseError') {
-        if (!req.body.position) {
-          return res.status(400).json({
-            error: true,
-            message: 'A posição do módulo é obrigatória',
-          });
-        }
-
-        if (!req.body.title) {
-          res.status(400).json({
-            error: true,
-            message: 'O nome do módulo é obrigatório',
-          });
-        }
       }
 
       return res.status(error.status || 500).json({
@@ -62,8 +60,8 @@ class ModuleController {
         });
       }
 
-      module.title = title;
-      module.position = position;
+      if (title) module.title = title;
+      if (position) module.position = position;
 
       module.save();
 
