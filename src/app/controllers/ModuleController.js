@@ -41,6 +41,43 @@ class ModuleController {
       });
     }
   }
+
+  async update(req, res) {
+    const { id, position, title } = req.body;
+
+    if (!id) {
+      return res.status(412).json({
+        error: true,
+        message: 'O ID do módulo é obrigatório',
+      });
+    }
+
+    try {
+      const module = await Module.findByPk(id);
+
+      if (!module) {
+        return res.status(404).json({
+          error: true,
+          message: 'Módulo não encontrado',
+        });
+      }
+
+      module.title = title;
+      module.position = position;
+
+      module.save();
+
+      return res.status(200).json({
+        error: false,
+        data: module,
+      });
+    } catch (error) {
+      return res.status(404).json({
+        error: true,
+        message: 'Erro ao atualizar módulo',
+      });
+    }
+  }
 }
 
 module.exports = new ModuleController();

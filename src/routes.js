@@ -14,6 +14,7 @@ routes.use(authMiddleware);
 routes.get('/modules', (req, res) => res.status(200).send());
 
 routes.use(adminMiddleware);
-routes.post('/modules', ModuleController.create);
+routes.post('/module', ModuleController.create);
+routes.patch('/module', ModuleController.update);
 
 module.exports = routes;

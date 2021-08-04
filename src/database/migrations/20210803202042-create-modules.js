@@ -4,10 +4,15 @@
 module.exports = {
   up: async (queryInterface, Sequelize) =>
     queryInterface.createTable('MODULE', {
+      id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        autoIncrement: true,
+      },
       position: {
         type: Sequelize.INTEGER,
-        primaryKey: true,
         allowNull: false,
+        unique: true,
       },
       title: {
         type: Sequelize.STRING,

@@ -2,7 +2,8 @@ module.exports = (sequelize, DataTypes) => {
   const Module = sequelize.define(
     'Module',
     {
-      position: { primaryKey: true, type: DataTypes.INTEGER },
+      id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+      position: { type: DataTypes.INTEGER, unique: true },
       title: DataTypes.STRING,
       createdAt: {
         field: 'created_at',
@@ -15,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       tableName: 'MODULE',
-    },
+    }
   );
 
   return Module;
