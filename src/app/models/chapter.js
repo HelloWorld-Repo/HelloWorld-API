@@ -40,5 +40,13 @@ module.exports = (sequelize, DataTypes) => {
     },
   );
 
+  Chapter.associate = (models) => {
+    Chapter.hasOne(models.Module, {
+      as: 'module',
+      foreignKey: 'id',
+      sourceKey: 'moduleId',
+    });
+  };
+
   return Chapter;
 };

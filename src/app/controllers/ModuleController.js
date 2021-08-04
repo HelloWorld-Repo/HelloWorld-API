@@ -79,8 +79,7 @@ class ModuleController {
 
   async list(req, res) {
     try {
-      const modules = await Module.findAll();
-
+      const modules = await Module.findAll({ include: 'chapters' });
       return res.status(200).json({
         error: false,
         data: modules,
