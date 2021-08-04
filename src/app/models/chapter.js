@@ -1,0 +1,44 @@
+module.exports = (sequelize, DataTypes) => {
+  const Chapter = sequelize.define(
+    'Chapter',
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        required: true,
+      },
+      position: {
+        type: DataTypes.INTEGER,
+        required: true,
+        allowNull: false,
+      },
+      title: { type: DataTypes.STRING, required: true, allowNull: false },
+      createdAt: {
+        field: 'created_at',
+        type: DataTypes.DATE,
+      },
+      updatedAt: {
+        field: 'updated_at',
+        type: DataTypes.DATE,
+        required: true,
+      },
+      moduleId: {
+        field: 'module_id',
+        type: DataTypes.INTEGER,
+        required: true,
+        references: {
+          model: {
+            tableName: 'MODULE',
+          },
+          key: 'id',
+        },
+      },
+    },
+    {
+      tableName: 'CHAPTER',
+    },
+  );
+
+  return Chapter;
+};
