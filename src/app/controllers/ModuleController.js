@@ -72,7 +72,7 @@ class ModuleController {
         data: module,
       });
     } catch (error) {
-      return res.status(404).json({
+      return res.status(500).json({
         error: true,
         message: 'Erro ao atualizar módulo',
       });
