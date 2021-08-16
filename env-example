@@ -1,0 +1,4 @@
+DB_USER: String
+DB_PASS: String
+DB_NAME: String
+SECRET_JWT: String
