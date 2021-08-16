@@ -7,6 +7,7 @@ const SessionController = require('./app/controllers/SessionController');
 const UserController = require('./app/controllers/UserController');
 const ModuleController = require('./app/controllers/ModuleController');
 const ChapterController = require('./app/controllers/ChapterController');
+const HistoryController = require('./app/controllers/HistoryController');
 
 routes.post('/login', SessionController.login);
 routes.post('/register', UserController.register);
@@ -17,6 +18,8 @@ routes.use(authMiddleware);
 routes.get('/modules', ModuleController.list);
 
 routes.get('/chapters', ChapterController.list);
+
+routes.post('/history', HistoryController.create);
 
 // These Routes needs admin athentication
 routes.use(adminMiddleware);

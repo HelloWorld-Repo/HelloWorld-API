@@ -1,4 +1,5 @@
-const { Module } = require('../models');
+const { Module, History } = require('../models');
+const HistoryController = require('./HistoryController');
 
 class ModuleController {
   async create(req, res) {
@@ -79,12 +80,20 @@ class ModuleController {
 
   async list(req, res) {
     try {
-      const modules = await Module.findAll({ include: 'chapters', order: ['position', ['chapters', 'position']] });
+      const modules = await Module.findAll({ include: 'chapters', order: ['position', ['chapters', 'position']]});
+
+      for(let module of modules){
+        for(let chapter of module.chapters) {
+          chapter.done = await HistoryController.hasHistory(req.userEmail, chapter.id);
+        };
+      };
+
       return res.status(200).json({
         error: false,
         data: modules,
       });
     } catch (error) {
+      console.error(error);
       return res.status(error.statusCode || 500).json({
         error: true,
         message: 'Erro ao buscar módulos',
