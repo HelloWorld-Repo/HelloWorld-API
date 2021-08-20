@@ -26,6 +26,13 @@ class ChapterController {
         });
       }
 
+      if (!req.body.explanation) {
+        return res.status(400).json({
+          error: true,
+          message: 'Insira um texto com a explicação do capítulo',
+        });
+      }
+
       if (!req.body.moduleId) {
         return res.status(400).json({
           error: true,

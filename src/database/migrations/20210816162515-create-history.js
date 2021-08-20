@@ -1,56 +1,44 @@
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-    // Product belongsToMany Tag
-    return queryInterface.createTable(
-      'HISTORY',
-      {
-        created_at: {
-          allowNull: false,
-          type: Sequelize.DATE,
-          allowNull: false,
-          required: true,
+  up: (queryInterface, Sequelize) => queryInterface.createTable('HISTORY', {
+    created_at: {
+      allowNull: false,
+      type: Sequelize.DATE,
+      required: true,
+    },
+    updated_at: {
+      allowNull: false,
+      type: Sequelize.DATE,
+      required: true,
+    },
+    user_email: {
+      type: Sequelize.STRING,
+      primaryKey: true,
+      allowNull: false,
+      required: true,
+      isEmail: true,
+      references: {
+        model: {
+          tableName: 'USER',
         },
-        updated_at: {
-          allowNull: false,
-          type: Sequelize.DATE,
-          allowNull: false,
-          required: true,
+        key: 'email',
+      },
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
+    },
+    chapter_id: {
+      type: Sequelize.INTEGER,
+      primaryKey: true,
+      allowNull: false,
+      required: true,
+      references: {
+        model: {
+          tableName: 'CHAPTER',
         },
-        user_email: {
-          type: Sequelize.STRING,
-          primaryKey: true,
-          allowNull: false,
-          required: true,
-          isEmail: true,
-          references: {
-            model: {
-              tableName: 'USER',
-            },
-            key: 'email',
-            onDelete: 'cascade',
-            onUpdate: 'cascade',
-          },
-        },
-        chapter_id: {
-          type: Sequelize.INTEGER,
-          primaryKey: true,
-          allowNull: false,
-          required: true,
-          references: {
-            model: {
-              tableName: 'CHAPTER',
-            },
-            key: 'id',
-            onDelete: 'cascade',
-            onUpdate: '',
-          },
-        },
-      }
-    );
-  },
+        key: 'id',
+      },
+      onDelete: 'CASCADE',
+    },
+  }),
 
-  down: (queryInterface, Sequelize) => {
-    // remove table
-    return queryInterface.dropTable('History');
-  },
+  down: (queryInterface, Sequelize) => queryInterface.dropTable('History'),
 };

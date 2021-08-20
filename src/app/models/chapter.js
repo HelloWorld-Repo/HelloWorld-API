@@ -1,5 +1,3 @@
-const History = require('./history');
-
 module.exports = (sequelize, DataTypes) => {
   const Chapter = sequelize.define(
     'Chapter',
@@ -16,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       title: { type: DataTypes.STRING, required: true, allowNull: false },
+      explanation: { type: DataTypes.TEXT, required: true },
       createdAt: {
         field: 'created_at',
         type: DataTypes.DATE,
@@ -37,8 +36,8 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       done: {
-        type: DataTypes.VIRTUAL    
-      }
+        type: DataTypes.VIRTUAL,
+      },
     },
     {
       tableName: 'CHAPTER',
