@@ -68,6 +68,7 @@ class ChapterController {
       position,
       title,
       moduleId,
+      explanation,
     } = req.body;
 
     if (!id) {
@@ -90,6 +91,7 @@ class ChapterController {
       if (title) chapter.title = title;
       if (position) chapter.position = position;
       if (moduleId) chapter.moduleId = moduleId;
+      if (explanation) chapter.explanation = explanation;
 
       await chapter.save();
 
