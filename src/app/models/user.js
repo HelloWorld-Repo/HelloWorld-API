@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         required: true,
         isEmail: true,
+        unique: true,
       },
       name: DataTypes.STRING,
       level: DataTypes.VIRTUAL,
