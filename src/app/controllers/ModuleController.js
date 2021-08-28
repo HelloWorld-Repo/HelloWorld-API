@@ -1,4 +1,5 @@
-const { Module, History } = require('../models');
+/* eslint-disable no-restricted-syntax */
+const { Module } = require('../models');
 const HistoryController = require('./HistoryController');
 
 class ModuleController {
@@ -71,6 +72,13 @@ class ModuleController {
         data: module,
       });
     } catch (error) {
+      if (error.name === 'SequelizeUniqueConstraintError') {
+        return res.status(409).json({
+          error: true,
+          message: 'Já existe um módulo nessa posição',
+        });
+      }
+
       return res.status(500).json({
         error: true,
         message: 'Erro ao atualizar módulo',
@@ -80,20 +88,41 @@ class ModuleController {
 
   async list(req, res) {
     try {
-      const modules = await Module.findAll({ include: 'chapters', order: ['position', ['chapters', 'position']]});
+      const modules = await Module.findAll({
+        include: 'chapters',
+        order: ['position', ['chapters', 'position']],
+      });
 
-      for(let module of modules){
-        for(let chapter of module.chapters) {
-          chapter.done = await HistoryController.hasHistory(req.userEmail, chapter.id);
-        };
-      };
+      // const promises = [];
+
+      // for (const module of modules) {
+      //   for (const chapter of module.chapters) {
+      //     promises.push(async () => {
+      //       chapter.done = await HistoryController.hasHistory(
+      //         req.userEmail,
+      //         chapter.id
+      //       );
+      //     });
+      //   }
+      // }
+
+      // await Promise.all(promises);
+
+      for (let module of modules) {
+        for (let chapter of module.chapters) {
+          chapter.done = await HistoryController.hasHistory(
+            req.userEmail,
+            chapter.id
+          );
+        }
+      }
 
       return res.status(200).json({
         error: false,
         data: modules,
       });
     } catch (error) {
-      console.error(error);
+      console.error('MODULE CONTROLLER', error);
       return res.status(error.statusCode || 500).json({
         error: true,
         message: 'Erro ao buscar módulos',

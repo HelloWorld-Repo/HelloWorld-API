@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Feedback.associate = (models) => {
-    Feedback.hasOne(models.Module, {
+    Feedback.hasOne(models.User, {
       as: 'user',
       foreignKey: 'email',
       sourceKey: 'userEmail',
