@@ -1,4 +1,5 @@
 const { User } = require('../models');
+const UserController = require('./UserController');
 
 class SessionController {
   async login(req, res) {
@@ -21,17 +22,20 @@ class SessionController {
         });
       }
 
+      const askForFeedback = await UserController.getAskForFeedback(email);
+
       return res.status(200).json({
         error: false,
         data: {
           user: {
-            email: user.email,
+            email,
             name: user.name,
             birthday: user.birthday,
             isAdmin: user.isAdmin,
             isStudent: user.isStudent,
             isFirstContact: user.isFirstContact,
             level: user.level,
+            askForFeedback,
           },
           token: user.generateToken(),
         },

@@ -50,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       tableName: 'USER',
-    }
+    },
   );
 
   User.prototype.checkPassword = function (password) {

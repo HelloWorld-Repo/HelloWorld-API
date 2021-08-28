@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 
-const { User } = require('../models');
+const { User, Feedback } = require('../models');
+const utils = require('../../utils');
 
 class UserController {
   async register(req, res) {
@@ -59,6 +60,14 @@ class UserController {
         message: error.message,
       });
     }
+  }
+
+  async getAskForFeedback(email) {
+    const feedback = await Feedback.findOne({ where: { userEmail: email } });
+
+    if (!feedback) return true;
+
+    return utils.getIntervalBetweenDates(feedback?.updatedAt, Date.now()) > 30;
   }
 }
 

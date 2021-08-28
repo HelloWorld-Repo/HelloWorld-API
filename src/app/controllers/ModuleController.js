@@ -93,26 +93,12 @@ class ModuleController {
         order: ['position', ['chapters', 'position']],
       });
 
-      // const promises = [];
-
-      // for (const module of modules) {
-      //   for (const chapter of module.chapters) {
-      //     promises.push(async () => {
-      //       chapter.done = await HistoryController.hasHistory(
-      //         req.userEmail,
-      //         chapter.id
-      //       );
-      //     });
-      //   }
-      // }
-
-      // await Promise.all(promises);
 
       for (let module of modules) {
         for (let chapter of module.chapters) {
           chapter.done = await HistoryController.hasHistory(
             req.userEmail,
-            chapter.id
+            chapter.id,
           );
         }
       }
