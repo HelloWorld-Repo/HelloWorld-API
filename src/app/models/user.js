@@ -50,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       tableName: 'USER',
-    },
+    }
   );
 
   User.prototype.checkPassword = function (password) {
@@ -59,6 +59,13 @@ module.exports = (sequelize, DataTypes) => {
 
   User.prototype.generateToken = function () {
     return jwt.sign({ id: this.email }, process.env.SECRET_JWT);
+  };
+
+  User.prototype.toJSON = function () {
+    const values = Object.assign(this.get());
+
+    delete values.passwordHash;
+    return values;
   };
 
   return User;

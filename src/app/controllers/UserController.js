@@ -77,7 +77,7 @@ class UserController {
       await user.destroy();
       return res.status(200).json({
         error: false,
-        data: user,
+        data: { user: user.toJSON() },
       });
     } catch (error) {
       console.error(error);
@@ -85,6 +85,39 @@ class UserController {
         error: true,
         message:
           'Não conseguimos remover essa conta, tente novamente mais tarde',
+      });
+    }
+  }
+
+  async update(req, res) {
+    const { birthday, name, level } = req.body;
+    const { userEmail } = req;
+
+    try {
+      const user = await User.findOne({ where: { email: userEmail } });
+
+      if (!user) {
+        return res.status(404).json({
+          error: true,
+          message: 'Usuário não encontrado',
+        });
+      }
+
+      if (birthday) user.birthday = birthday;
+      if (name) user.name = name;
+      if (level) user.level = level;
+
+      await user.save();
+      return res.status(200).json({
+        error: false,
+        data: { user: user.toJSON() },
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({
+        error: true,
+        message:
+          'Ocorreu um erro ao remover o usuário, tente nvamente mais tarde',
       });
     }
   }
