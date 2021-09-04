@@ -62,6 +62,33 @@ class UserController {
     }
   }
 
+  async delete(req, res) {
+    try {
+      const { userEmail } = req;
+      const user = await User.findOne({ where: { email: userEmail } });
+
+      if (!user) {
+        return res.status(404).json({
+          error: true,
+          message: 'Usuário não encontrado',
+        });
+      }
+
+      await user.destroy();
+      return res.status(200).json({
+        error: false,
+        data: user,
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({
+        error: true,
+        message:
+          'Não conseguimos remover essa conta, tente novamente mais tarde',
+      });
+    }
+  }
+
   async getAskForFeedback(email) {
     const feedback = await Feedback.findOne({ where: { userEmail: email } });
 

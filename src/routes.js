@@ -25,6 +25,8 @@ routes.post('/history', HistoryController.create);
 routes.post('/feedback', FeedbackController.updateOrCreate);
 routes.get('/feedbacks', FeedbackController.list);
 
+routes.delete('/user', UserController.delete);
+
 // These Routes needs admin athentication
 routes.use(adminMiddleware);
 
