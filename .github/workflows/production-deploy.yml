@@ -30,7 +30,7 @@ jobs:
 
   deploy:
     name: Deploy package to DigitalOcean 
-    needs: build
+    needs: build-and-push-image
     runs-on: ubuntu-latest
     steps:
       - name: Deploy package to DigitalOcean
