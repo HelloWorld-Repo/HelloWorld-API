@@ -6,14 +6,8 @@ on:
       - development
 
 jobs:
-  build:
-    name: Push Docker image to GitHub Packages
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out the repo
-        uses: actions/checkout@v2
-
   build-and-push-image:
+    name: Push Docker image to GitHub Packages
     runs-on: ubuntu-latest
     permissions: 
       contents: read
@@ -32,8 +26,7 @@ jobs:
         with:
           push: true
           tags: |
-            docker.pkg.github.com/${{ github.repository }}/octo-image:${{ github.sha }}
-            docker.pkg.github.com/${{ github.repository }}/octo-image:${{ github.ref }}
+            docker.pkg.github.com/helloworld-api:latest
 
   deploy:
     name: Deploy package to DigitalOcean 
@@ -53,7 +46,7 @@ jobs:
           script: |
             cd hello-world/server
             docker login docker.pkg.github.com -u $GITHUB_USERNAME -p $GITHUB_TOKEN
-            docker pull docker.pkg.github.com/HelloWorld-Repo/HelloWorld-API/helloworld-api:production
+            docker pull docker.pkg.github.com/helloworld-api:latest
             docker-compose -f docker-compose.prod.yml up -d
 
 
