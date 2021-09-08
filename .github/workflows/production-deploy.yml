@@ -26,7 +26,7 @@ jobs:
         with:
           push: true
           tags: |
-            docker.pkg.github.com/helloworld-api:latest
+            docker.pkg.github.com/${{ github.repository }}:latest
 
   deploy:
     name: Deploy package to DigitalOcean 
