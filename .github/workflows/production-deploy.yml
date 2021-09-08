@@ -18,9 +18,8 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
-          name: hello-world/server
+          name: helloworld-api
           tags: production
-          workdir: server
           default_branch: master
           dockerfile: Dockerfile
 
@@ -42,7 +41,7 @@ jobs:
           script: |
             cd hello-world/server
             docker login docker.pkg.github.com -u $GITHUB_USERNAME -p $GITHUB_TOKEN
-            docker pull docker.pkg.github.com/HelloWorld-Repo/HelloWorld-API/server:production
+            docker pull docker.pkg.github.com/HelloWorld-Repo/HelloWorld-API/helloworld-api:production
             docker-compose -f docker-compose.prod.yml up -d
 
 
