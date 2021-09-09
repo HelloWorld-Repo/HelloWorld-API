@@ -3,8 +3,6 @@ version: '3.1'
 services:
   api:
     image: docker.pkg.github.com/helloworld-repo/helloworld-api/server:latest
-    build: .
-    command: npm start
     restart: always
     depends_on:
       - postgres
@@ -12,10 +10,7 @@ services:
       - '3000:3000'
     env_file:
       - .env-prod
-    volumes:
-      - .:/usr/api
-      - /usr/app/node_modules
-      
+    command: npm start
   postgres:
     image: postgres:11.2-alpine
     ports:
