@@ -125,7 +125,10 @@ class UserController {
   async getAskForFeedback(email) {
     const feedback = await Feedback.findOne({ where: { userEmail: email } });
 
-    if (!feedback) return true;
+    if (!feedback) {
+      const user = await User.findOne({ where: { email } });
+      return utils.getIntervalBetweenDates(user?.createdAt, Date.now()) > 7;
+    }
 
     return utils.getIntervalBetweenDates(feedback?.updatedAt, Date.now()) > 30;
   }
