@@ -9,6 +9,7 @@ const ModuleController = require('./app/controllers/ModuleController');
 const ChapterController = require('./app/controllers/ChapterController');
 const HistoryController = require('./app/controllers/HistoryController');
 const FeedbackController = require('./app/controllers/FeedbackController');
+const QuestionController = require('./app/controllers/QuestionController');
 
 routes.post('/login', SessionController.login);
 routes.post('/register', UserController.register);
@@ -36,5 +37,7 @@ routes.patch('/module', ModuleController.update);
 
 routes.post('/chapter', ChapterController.create);
 routes.patch('/chapter', ChapterController.update);
+
+routes.post('/question', QuestionController.create);
 
 module.exports = routes;
