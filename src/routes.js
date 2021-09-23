@@ -29,6 +29,8 @@ routes.get('/feedbacks', FeedbackController.list);
 routes.delete('/user', UserController.delete);
 routes.patch('/user', UserController.update);
 
+// routes.get('/question', QuestionController.get);
+
 // These Routes needs admin athentication
 routes.use(adminMiddleware);
 
@@ -39,5 +41,6 @@ routes.post('/chapter', ChapterController.create);
 routes.patch('/chapter', ChapterController.update);
 
 routes.post('/question', QuestionController.create);
+routes.patch('/question', QuestionController.update);
 
 module.exports = routes;

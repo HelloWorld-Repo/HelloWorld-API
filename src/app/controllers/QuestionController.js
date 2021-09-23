@@ -42,78 +42,40 @@ class ModuleController {
     }
   }
 
-  // async update(req, res) {
-  //   const { id, position, title } = req.body;
+  async update(req, res) {
+    const { id, description } = req.body;
 
-  //   if (!id) {
-  //     return res.status(412).json({
-  //       error: true,
-  //       message: 'O ID do módulo é obrigatório',
-  //     });
-  //   }
+    if (!id) {
+      return res.status(412).json({
+        error: true,
+        message: 'O ID da questão é obrigatório',
+      });
+    }
 
-  //   try {
-  //     const module = await Module.findByPk(id);
+    try {
+      const question = await Question.findByPk(id);
 
-  //     if (!module) {
-  //       return res.status(404).json({
-  //         error: true,
-  //         message: 'Módulo não encontrado',
-  //       });
-  //     }
+      if (!question) {
+        return res.status(404).json({
+          error: true,
+          message: 'Questão não encontrada',
+        });
+      }
 
-  //     if (title) module.title = title;
-  //     if (position) module.position = position;
+      if (description) question.description = description;
+      await question.save();
 
-  //     await module.save();
-
-  //     return res.status(200).json({
-  //       error: false,
-  //       data: module,
-  //     });
-  //   } catch (error) {
-  //     if (error.name === 'SequelizeUniqueConstraintError') {
-  //       return res.status(409).json({
-  //         error: true,
-  //         message: 'Já existe um módulo nessa posição',
-  //       });
-  //     }
-
-  //     return res.status(500).json({
-  //       error: true,
-  //       message: 'Erro ao atualizar módulo',
-  //     });
-  //   }
-  // }
-
-  // async list(req, res) {
-  //   try {
-  //     const modules = await Module.findAll({
-  //       include: 'chapters',
-  //       order: ['position', ['chapters', 'position']],
-  //     });
-
-  //     for (let module of modules) {
-  //       for (let chapter of module.chapters) {
-  //         chapter.done = await HistoryController.hasHistory(
-  //           req.userEmail,
-  //           chapter.id,
-  //         );
-  //       }
-  //     }
-
-  //     return res.status(200).json({
-  //       error: false,
-  //       data: modules,
-  //     });
-  //   } catch (error) {
-  //     console.error('MODULE CONTROLLER', error);
-  //     return res.status(error.statusCode || 500).json({
-  //       error: true,
-  //       message: 'Erro ao buscar módulos',
-  //     });
-  //   }
-  // }
+      return res.status(200).json({
+        error: false,
+        data: question,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        error: true,
+        message: 'Erro ao atualizar módulo',
+      });
+    }
+  }
 }
 
 module.exports = new ModuleController();
