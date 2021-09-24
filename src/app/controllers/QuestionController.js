@@ -72,7 +72,41 @@ class ModuleController {
     } catch (error) {
       return res.status(500).json({
         error: true,
-        message: 'Erro ao atualizar módulo',
+        message: 'Erro ao atualizar questão',
+      });
+    }
+  }
+
+  async get(req, res) {
+    const { id } = req.query;
+
+    if (!id) {
+      return res.status(412).json({
+        error: true,
+        message: 'O ID da questão é obrigatório',
+      });
+    }
+
+    try {
+      const question = await Question.findByPk(id, {
+        include: 'options',
+      });
+
+      if (!question) {
+        return res.status(404).json({
+          error: true,
+          message: 'Questão não encontrada',
+        });
+      }
+
+      return res.status(200).json({
+        error: false,
+        data: question,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        error: true,
+        message: 'Erro ao recuperar questão',
       });
     }
   }

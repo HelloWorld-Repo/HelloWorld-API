@@ -10,6 +10,7 @@ const ChapterController = require('./app/controllers/ChapterController');
 const HistoryController = require('./app/controllers/HistoryController');
 const FeedbackController = require('./app/controllers/FeedbackController');
 const QuestionController = require('./app/controllers/QuestionController');
+const OptionController = require('./app/controllers/OptionController');
 
 routes.post('/login', SessionController.login);
 routes.post('/register', UserController.register);
@@ -29,7 +30,7 @@ routes.get('/feedbacks', FeedbackController.list);
 routes.delete('/user', UserController.delete);
 routes.patch('/user', UserController.update);
 
-// routes.get('/question', QuestionController.get);
+routes.get('/question', QuestionController.get);
 
 // These Routes needs admin athentication
 routes.use(adminMiddleware);
@@ -42,5 +43,8 @@ routes.patch('/chapter', ChapterController.update);
 
 routes.post('/question', QuestionController.create);
 routes.patch('/question', QuestionController.update);
+
+routes.post('/option', OptionController.create);
+routes.patch('/option', OptionController.update);
 
 module.exports = routes;

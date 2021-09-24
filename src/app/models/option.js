@@ -1,8 +1,6 @@
-const { questionTypesEnum } = require('../enums');
-
 module.exports = (sequelize, DataTypes) => {
-  const Question = sequelize.define(
-    'Question',
+  const Option = sequelize.define(
+    'Option',
     {
       id: {
         type: DataTypes.INTEGER,
@@ -11,40 +9,52 @@ module.exports = (sequelize, DataTypes) => {
         required: true,
         allowNull: false,
       },
-      description: {
+      text: {
         type: DataTypes.TEXT,
         allowNull: false,
         required: true,
       },
-      type: {
-        type: DataTypes.ENUM(...questionTypesEnum),
+      isRight: {
+        field: 'is_right',
+        type: DataTypes.BOOLEAN,
         allowNull: false,
         required: true,
       },
       createdAt: {
         field: 'created_at',
         type: DataTypes.DATE,
-        required: true,
-        allowNull: false,
       },
       updatedAt: {
         field: 'updated_at',
         type: DataTypes.DATE,
         required: true,
-        allowNull: false,
+      },
+      questionId: {
+        field: 'question_id',
+        type: DataTypes.INTEGER,
+        required: true,
+        references: {
+          model: {
+            tableName: 'QUESTION',
+          },
+          key: 'id',
+        },
+      },
+      answered: {
+        type: DataTypes.VIRTUAL,
       },
     },
     {
-      tableName: 'QUESTION',
+      tableName: 'OPTION',
     }
   );
 
-  Question.associate = (models) => {
-    Question.hasMany(models.Option, {
-      as: 'options',
+  Option.associate = (models) => {
+    Option.belongsTo(models.Question, {
       foreignKey: 'questionId',
+      targetKey: 'id',
     });
   };
 
-  return Question;
+  return Option;
 };
