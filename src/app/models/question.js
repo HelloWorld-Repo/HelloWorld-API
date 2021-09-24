@@ -21,6 +21,19 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         required: true,
       },
+      chapterId: {
+        type: DataTypes.INTEGER,
+        required: true,
+        allowNull: false,
+        references: {
+          model: {
+            tableName: 'CHAPTER',
+          },
+          key: 'id',
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      },
       createdAt: {
         field: 'created_at',
         type: DataTypes.DATE,
@@ -43,6 +56,11 @@ module.exports = (sequelize, DataTypes) => {
     Question.hasMany(models.Option, {
       as: 'options',
       foreignKey: 'questionId',
+    });
+
+    Question.belongsTo(models.Chapter, {
+      foreignKey: 'chapterId',
+      targetKey: 'id',
     });
   };
 

@@ -40,9 +40,6 @@ module.exports = (sequelize, DataTypes) => {
           key: 'id',
         },
       },
-      answered: {
-        type: DataTypes.VIRTUAL,
-      },
     },
     {
       tableName: 'OPTION',

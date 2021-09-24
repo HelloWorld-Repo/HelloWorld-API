@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       tableName: 'CHAPTER',
-    },
+    }
   );
 
   Chapter.associate = (models) => {
@@ -49,6 +49,10 @@ module.exports = (sequelize, DataTypes) => {
       as: 'module',
       foreignKey: 'id',
       sourceKey: 'moduleId',
+    });
+    Chapter.hasMany(models.Question, {
+      as: 'questions',
+      foreignKey: 'chapterId',
     });
   };
 

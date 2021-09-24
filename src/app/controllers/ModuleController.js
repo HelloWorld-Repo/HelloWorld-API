@@ -1,5 +1,6 @@
+/* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
-const { Module } = require('../models');
+const { Module, Chapter, Question, Option } = require('../models');
 const HistoryController = require('./HistoryController');
 
 class ModuleController {
@@ -89,16 +90,27 @@ class ModuleController {
   async list(req, res) {
     try {
       const modules = await Module.findAll({
-        include: 'chapters',
+        include: [
+          {
+            model: Chapter,
+            as: 'chapters',
+            include: [
+              {
+                as: 'questions',
+                model: Question,
+                include: [{ model: Option, as: 'options' }],
+              },
+            ],
+          },
+        ],
         order: ['position', ['chapters', 'position']],
       });
 
-
-      for (let module of modules) {
-        for (let chapter of module.chapters) {
+      for (const module of modules) {
+        for (const chapter of module.chapters) {
           chapter.done = await HistoryController.hasHistory(
             req.userEmail,
-            chapter.id,
+            chapter.id
           );
         }
       }

@@ -22,14 +22,28 @@ class ModuleController {
       }
 
       if (!req.body.type) {
-        res.status(400).json({
+        return res.status(400).json({
           error: true,
           message: 'O tipo da questão é obrigatório',
         });
       }
 
+      if (!req.body.chapterId) {
+        return res.status(400).json({
+          error: true,
+          message: 'Indentifique o capítulo ao qual essa questão pertence',
+        });
+      }
+
+      if (error.name === 'SequelizeForeignKeyConstraintError') {
+        return res.status(404).json({
+          error: true,
+          message: 'Esse capítulo não existe',
+        });
+      }
+
       if (!questionTypesEnum.includes(req.body.type)) {
-        res.status(400).json({
+        return res.status(400).json({
           error: true,
           message: `O tipo da questão deve ser um desses: ${questionTypesEnum}`,
         });
