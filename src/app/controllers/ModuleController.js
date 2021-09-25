@@ -1,5 +1,6 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
+const Sequelize = require('sequelize');
 const { Module, Chapter, Question, Option } = require('../models');
 const HistoryController = require('./HistoryController');
 
@@ -96,9 +97,11 @@ class ModuleController {
             as: 'chapters',
             include: [
               {
+                order: Sequelize.literal('random()'),
                 as: 'questions',
                 model: Question,
-                include: [{ model: Option, as: 'options' }],
+                limit: 3,
+                include: [{ model: Option, as: 'options', separate: true }],
               },
             ],
           },

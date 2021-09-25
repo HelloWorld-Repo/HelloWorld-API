@@ -31,6 +31,19 @@ module.exports = {
         allowNull: false,
         required: true,
       },
+      chapterId: {
+        type: Sequelize.INTEGER,
+        required: true,
+        allowNull: false,
+        references: {
+          model: {
+            tableName: 'CHAPTER',
+          },
+          key: 'id',
+        },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      },
     }),
   down: async (queryInterface) => queryInterface.dropTable('QUESTION'),
 };
