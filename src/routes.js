@@ -11,6 +11,7 @@ const HistoryController = require('./app/controllers/HistoryController');
 const FeedbackController = require('./app/controllers/FeedbackController');
 const QuestionController = require('./app/controllers/QuestionController');
 const OptionController = require('./app/controllers/OptionController');
+const AnswerController = require('./app/controllers/AnswerController');
 
 routes.post('/login', SessionController.login);
 routes.post('/register', UserController.register);
@@ -31,6 +32,8 @@ routes.delete('/user', UserController.delete);
 routes.patch('/user', UserController.update);
 
 routes.get('/question', QuestionController.get);
+
+routes.post('/answer', AnswerController.updateOrCreate);
 
 // These Routes needs admin athentication
 routes.use(adminMiddleware);

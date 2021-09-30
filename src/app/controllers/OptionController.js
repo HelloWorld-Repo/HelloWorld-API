@@ -19,7 +19,7 @@ class OptionController {
           message: 'O texto da opção é obrigatório',
         });
       }
-      if (!req.body.isRight) {
+      if (typeof req.body.isRight !== 'boolean') {
         return res.status(400).json({
           error: true,
           message: 'Você deve informar se a opção é correta',
