@@ -32,6 +32,7 @@ routes.delete('/user', UserController.delete);
 routes.patch('/user', UserController.update);
 
 routes.get('/question', QuestionController.get);
+routes.get('/questions', QuestionController.getQuestionsFromChapter);
 
 routes.post('/answer', AnswerController.updateOrCreate);
 

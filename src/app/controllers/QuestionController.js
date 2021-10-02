@@ -1,8 +1,9 @@
 /* eslint-disable no-restricted-syntax */
-const { Question } = require('../models');
+const Sequelize = require('sequelize');
+const { Question, Option } = require('../models');
 const { questionTypesEnum } = require('../enums');
 
-class ModuleController {
+class QuestionController {
   async create(req, res) {
     try {
       const module = await Question.create({
@@ -124,6 +125,37 @@ class ModuleController {
       });
     }
   }
+
+  async getQuestionsFromChapter(req, res) {
+    const { chapterId } = req.query;
+
+    if (!chapterId) {
+      return res.status(412).json({
+        error: true,
+        message: 'O ID do capítulo é obrigatório',
+      });
+    }
+
+    try {
+      const questions = await Question.findAll({
+        where: { chapterId },
+        order: Sequelize.literal('random()'),
+        limit: 3,
+        include: [{ model: Option, as: 'options', separate: true }],
+      });
+
+      return res.status(200).json({
+        error: false,
+        data: questions || [],
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({
+        error: true,
+        message: 'Erro ao recuperar questões',
+      });
+    }
+  }
 }
 
-module.exports = new ModuleController();
+module.exports = new QuestionController();
