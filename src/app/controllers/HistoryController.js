@@ -3,8 +3,10 @@ const { History } = require('../models');
 class HistoryController {
   async create(req, res) {
     try {
+      const { userEmail } = req;
       const history = await History.create({
         ...req.body,
+        userEmail,
       });
 
       return res.status(200).json({
@@ -16,13 +18,6 @@ class HistoryController {
         return res.status(400).json({
           error: true,
           message: 'O ID do capítulo é obrigatório',
-        });
-      }
-
-      if (!req.body.userEmail) {
-        return res.status(400).json({
-          error: true,
-          message: 'O e-mail do usuário é obrigatório',
         });
       }
 
