@@ -17,7 +17,7 @@ module.exports = {
         required: true,
       },
       type: {
-        type: Sequelize.ENUM('1', '2', '3'),
+        type: Sequelize.ENUM('1', '2'),
         allowNull: false,
         required: true,
       },

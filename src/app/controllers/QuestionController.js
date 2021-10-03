@@ -6,13 +6,22 @@ const { questionTypesEnum } = require('../enums');
 class QuestionController {
   async create(req, res) {
     try {
-      const module = await Question.create({
+      const { type, description } = req.body;
+      if (parseInt(type, 10) === 2 && !description.includes('_')) {
+        return res.status(400).json({
+          error: true,
+          message:
+            'Para criar uma questão de lacunas, você deve informar o local dos espaços com \'_\'',
+        });
+      }
+
+      const question = await Question.create({
         ...req.body,
       });
 
       return res.status(200).json({
         error: false,
-        data: module,
+        data: question,
       });
     } catch (error) {
       if (!req.body.description) {

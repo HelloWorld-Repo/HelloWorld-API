@@ -1,4 +1,4 @@
-const questionTypesEnum = ['1', '2', '3'];
+const questionTypesEnum = ['1', '2'];
 
 module.exports = {
   questionTypesEnum,
