@@ -11,7 +11,7 @@ class QuestionController {
         return res.status(400).json({
           error: true,
           message:
-            'Para criar uma questão de lacunas, você deve informar o local dos espaços com \'_\'',
+            "Para criar uma questão de lacunas, você deve informar o local dos espaços com '_'",
         });
       }
 
@@ -136,20 +136,18 @@ class QuestionController {
   }
 
   async getQuestionsFromChapter(req, res) {
-    const { chapterId } = req.query;
-
-    if (!chapterId) {
-      return res.status(412).json({
-        error: true,
-        message: 'O ID do capítulo é obrigatório',
-      });
-    }
+    const { chapterId = null, limit = null, type = null } = req.query;
 
     try {
+      const where = {};
+
+      if (chapterId) where.chapterId = chapterId;
+      if (type) where.type = type;
+
       const questions = await Question.findAll({
-        where: { chapterId },
+        where,
         order: Sequelize.literal('random()'),
-        limit: 3,
+        limit: limit ?? 3,
         include: [{ model: Option, as: 'options', separate: true }],
       });
 
