@@ -1,4 +1,5 @@
-const { Answer } = require('../models');
+const { Op } = require('sequelize');
+const { Answer, Question, Chapter, Module } = require('../models');
 
 class AnswerController {
   async updateOrCreate(req, res) {
@@ -74,6 +75,76 @@ class AnswerController {
     } catch (error) {
       return false;
     }
+  }
+
+  async getAnsweredQuestions(userEmail, moduleId) {
+    const questions = await Answer.count({
+      where: {
+        '$question.chapter.module.id$': moduleId,
+        userEmail,
+      },
+      include: {
+        model: Question,
+        as: 'question',
+        include: {
+          model: Chapter,
+          as: 'chapter',
+          include: {
+            as: 'module',
+            model: Module,
+          },
+        },
+      },
+    });
+
+    return questions;
+  }
+
+  async getCorrectAnsweredQuestions(userEmail, moduleId) {
+    const questions = await Answer.count({
+      where: {
+        '$question.chapter.module.id$': moduleId,
+        correctedAnswer: true,
+        userEmail,
+      },
+      include: {
+        model: Question,
+        as: 'question',
+        include: {
+          model: Chapter,
+          as: 'chapter',
+          include: {
+            as: 'module',
+            model: Module,
+          },
+        },
+      },
+    });
+    return questions;
+  }
+
+  async getWrongAnsweredQuestions(userEmail, moduleId) {
+    const questions = await Answer.count({
+      where: {
+        '$question.chapter.module.id$': moduleId,
+        correctedAnswer: false,
+        userEmail,
+      },
+      include: {
+        model: Question,
+        as: 'question',
+        include: {
+          model: Chapter,
+          as: 'chapter',
+          include: {
+            as: 'module',
+            model: Module,
+          },
+        },
+      },
+    });
+
+    return questions;
   }
 }
 

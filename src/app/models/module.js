@@ -28,10 +28,19 @@ module.exports = (sequelize, DataTypes) => {
         required: true,
         allowNull: false,
       },
+      questionsCount: {
+        type: DataTypes.VIRTUAL,
+      },
+      correctQuestionsCount: {
+        type: DataTypes.VIRTUAL,
+      },
+      wrongQuestionsCount: {
+        type: DataTypes.VIRTUAL,
+      },
     },
     {
       tableName: 'MODULE',
-    },
+    }
   );
 
   Module.associate = (models) => {

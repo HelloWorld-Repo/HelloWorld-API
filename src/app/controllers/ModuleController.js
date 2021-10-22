@@ -2,6 +2,7 @@
 /* eslint-disable no-restricted-syntax */
 const { Module, Chapter } = require('../models');
 const HistoryController = require('./HistoryController');
+const AnswerController = require('./AnswerController');
 
 class ModuleController {
   async create(req, res) {
@@ -106,6 +107,43 @@ class ModuleController {
             chapter.id
           );
         }
+      }
+
+      return res.status(200).json({
+        error: false,
+        data: modules,
+      });
+    } catch (error) {
+      console.error('MODULE CONTROLLER', error);
+      return res.status(error.statusCode || 500).json({
+        error: true,
+        message: 'Erro ao buscar módulos',
+      });
+    }
+  }
+
+  async listWithQuestions(req, res) {
+    // lista de módulos com quantidade de questões, questões respondidas corretamente e erradas.
+    try {
+      const modules = await Module.findAll({
+        order: ['position'],
+      });
+
+      const { userEmail } = req;
+
+      for (const module of modules) {
+        module.questionsCount = await AnswerController.getAnsweredQuestions(
+          userEmail,
+          module.id,
+        );
+        module.correctQuestionsCount = await AnswerController.getCorrectAnsweredQuestions(
+          userEmail,
+          module.id,
+        );
+        module.wrongQuestionsCount = await AnswerController.getWrongAnsweredQuestions(
+          userEmail,
+          module.id,
+        );
       }
 
       return res.status(200).json({

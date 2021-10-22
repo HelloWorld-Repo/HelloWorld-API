@@ -56,5 +56,13 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
+  Answer.associate = (models) => {
+    Answer.hasOne(models.Question, {
+      as: 'question',
+      foreignKey: 'id',
+      sourceKey: 'questionId',
+    });
+  };
+
   return Answer;
 };

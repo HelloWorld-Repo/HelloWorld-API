@@ -20,6 +20,7 @@ routes.post('/register', UserController.register);
 routes.use(authMiddleware);
 
 routes.get('/modules', ModuleController.list);
+routes.get('/answersByModule', ModuleController.listWithQuestions);
 
 routes.get('/chapters', ChapterController.list);
 
