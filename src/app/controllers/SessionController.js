@@ -1,5 +1,6 @@
 const { User } = require('../models');
 const UserController = require('./UserController');
+const HistoryController = require('./HistoryController');
 
 class SessionController {
   async login(req, res) {
@@ -23,6 +24,7 @@ class SessionController {
       }
 
       const askForFeedback = await UserController.getAskForFeedback(email);
+      const level = await HistoryController.getChaptersCompletedCount(email);
 
       return res.status(200).json({
         error: false,
@@ -34,7 +36,7 @@ class SessionController {
             isAdmin: user.isAdmin,
             isStudent: user.isStudent,
             isFirstContact: user.isFirstContact,
-            level: user.level,
+            level,
             askForFeedback,
           },
           token: user.generateToken(),

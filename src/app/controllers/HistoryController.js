@@ -52,6 +52,17 @@ class HistoryController {
       return false;
     }
   }
+
+  async getChaptersCompletedCount(userEmail) {
+    const count = History.count({
+      where: {
+        userEmail,
+      },
+    });
+
+
+    return count;
+  }
 }
 
 module.exports = new HistoryController();
