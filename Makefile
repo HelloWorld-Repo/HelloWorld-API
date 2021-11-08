@@ -24,6 +24,12 @@ undo-migrate:
 
 create-migration:
 	docker-compose exec api npx sequelize migration:create --name=$(name)
+	
+npm:
+	docker-compose exec api npm install $(pacote)
+
+npm-dev:
+	docker-compose exec api npm install -D $(pacote)
 
 stop-local-postgres:
 	pg_ctl -D "C:\Program Files\PostgreSQL\13\data" stop
