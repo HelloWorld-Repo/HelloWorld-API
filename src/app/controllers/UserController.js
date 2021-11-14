@@ -31,6 +31,7 @@ class UserController {
           isStudent: user.isStudent,
           isFirstContact: user.isFirstContact,
           level: user.level,
+          classId: user.classId,
         },
       });
     } catch (error) {
@@ -38,6 +39,13 @@ class UserController {
         return res.status(409).json({
           error: true,
           message: 'Já existe uma conta com esse e-mail',
+        });
+      }
+
+      if (error.name === 'SequelizeForeignKeyConstraintError') {
+        return res.status(404).json({
+          error: true,
+          message: 'Essa turma não existe',
         });
       }
 
@@ -90,8 +98,19 @@ class UserController {
   }
 
   async update(req, res) {
-    const { birthday, name, level } = req.body;
-    const { userEmail } = req;
+    const {
+      birthday,
+      name,
+      level,
+      classId,
+      userEmail: userFromBody,
+    } = req.body;
+
+    let { userEmail } = req;
+
+    if (!userEmail) {
+      userEmail = userFromBody;
+    }
 
     try {
       const user = await User.findOne({ where: { email: userEmail } });
@@ -106,6 +125,7 @@ class UserController {
       if (birthday) user.birthday = birthday;
       if (name) user.name = name;
       if (level) user.level = level;
+      if (classId) user.classId = classId;
 
       await user.save();
       return res.status(200).json({

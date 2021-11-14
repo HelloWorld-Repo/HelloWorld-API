@@ -47,11 +47,25 @@ module.exports = (sequelize, DataTypes) => {
         required: true,
         allowNull: false,
       },
+      classId: {
+        field: 'class_id',
+        type: DataTypes.INTEGER,
+        required: true,
+        allowNull: true,
+      },
     },
     {
       tableName: 'USER',
     }
   );
+
+  User.associate = (models) => {
+    User.hasOne(models.Class, {
+      as: 'class',
+      foreignKey: 'id',
+      sourceKey: 'classId',
+    });
+  };
 
   User.prototype.checkPassword = function (password) {
     return bcrypt.compare(password, this.passwordHash);

@@ -12,6 +12,7 @@ const FeedbackController = require('./app/controllers/FeedbackController');
 const QuestionController = require('./app/controllers/QuestionController');
 const OptionController = require('./app/controllers/OptionController');
 const AnswerController = require('./app/controllers/AnswerController');
+const ClassController = require('./app/controllers/ClassController');
 
 routes.post('/login', SessionController.login);
 routes.post('/register', UserController.register);
@@ -51,5 +52,10 @@ routes.patch('/question', QuestionController.update);
 
 routes.post('/option', OptionController.create);
 routes.patch('/option', OptionController.update);
+
+routes.post('/class', ClassController.create);
+routes.patch('/class', ClassController.update);
+routes.delete('/class', ClassController.delete);
+routes.get('/classes', ClassController.list);
 
 module.exports = routes;
