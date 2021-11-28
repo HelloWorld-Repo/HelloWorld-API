@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 
-const { User, Feedback } = require('../models');
+const { User, Feedback, Class } = require('../models');
 const utils = require('../../utils');
 
 class UserController {
@@ -151,6 +151,31 @@ class UserController {
     }
 
     return utils.getIntervalBetweenDates(feedback?.updatedAt, Date.now()) > 30;
+  }
+
+  async list(req, res) {
+    try {
+      const students = await User.findAll({
+        include: [
+          {
+            model: Class,
+            as: 'class',
+          },
+        ],
+        order: ['name'],
+      });
+
+      return res.status(200).json({
+        error: false,
+        data: students,
+      });
+    } catch (error) {
+      console.error('USER CONTROLLER', error);
+      return res.status(error.statusCode || 500).json({
+        error: true,
+        message: 'Erro ao buscar usuários',
+      });
+    }
   }
 }
 
