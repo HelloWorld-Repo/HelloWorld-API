@@ -41,6 +41,8 @@ routes.post('/answer', AnswerController.updateOrCreate);
 // These Routes needs admin athentication
 routes.use(adminMiddleware);
 
+routes.get('/users', UserController.list);
+
 routes.post('/module', ModuleController.create);
 routes.patch('/module', ModuleController.update);
 
