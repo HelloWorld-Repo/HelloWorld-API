@@ -1,4 +1,4 @@
-const { Chapter } = require('../models');
+const { Chapter, Module } = require('../models');
 
 class ChapterController {
   async create(req, res) {
@@ -63,13 +63,7 @@ class ChapterController {
   }
 
   async update(req, res) {
-    const {
-      id,
-      position,
-      title,
-      moduleId,
-      explanation,
-    } = req.body;
+    const { id, position, title, moduleId, explanation } = req.body;
 
     if (!id) {
       return res.status(412).json({
@@ -123,7 +117,15 @@ class ChapterController {
 
   async list(req, res) {
     try {
-      const chapters = await Chapter.findAll();
+      const chapters = await Chapter.findAll({
+        include: [
+          {
+            model: Module,
+            as: 'module',
+          },
+        ],
+        order: [['module', 'position'], 'position'],
+      });
 
       return res.status(200).json({
         error: false,
