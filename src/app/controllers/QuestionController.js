@@ -1,6 +1,8 @@
 /* eslint-disable no-restricted-syntax */
 const Sequelize = require('sequelize');
-const { Question, Option } = require('../models');
+const {
+  Question, Option, Module, Chapter,
+} = require('../models');
 const { questionTypesEnum } = require('../enums');
 
 class QuestionController {
@@ -147,8 +149,26 @@ class QuestionController {
       const questions = await Question.findAll({
         where,
         order: Sequelize.literal('random()'),
-        limit: limit ?? 3,
-        include: [{ model: Option, as: 'options', separate: true }],
+        limit,
+        include: [
+          {
+            model: Option,
+            as: 'options',
+            separate: true,
+          },
+          {
+            model: Chapter,
+            as: 'chapter',
+            attributes: ['id', 'title'],
+            include: [
+              {
+                model: Module,
+                as: 'module',
+                attributes: ['id', 'title'],
+              },
+            ],
+          },
+        ],
       });
 
       return res.status(200).json({
@@ -156,7 +176,6 @@ class QuestionController {
         data: questions || [],
       });
     } catch (error) {
-      console.error(error);
       return res.status(500).json({
         error: true,
         message: 'Erro ao recuperar questões',
