@@ -3,9 +3,12 @@ const { Chapter, Module } = require('../models');
 class ChapterController {
   async create(req, res) {
     try {
-      const chapter = await Chapter.create({
-        ...req.body,
-      });
+      const chapter = await Chapter.create(
+        {
+          ...req.body,
+        },
+        { include: [{ model: Module, as: 'module' }] },
+      );
 
       return res.status(200).json({
         error: false,
@@ -135,6 +138,40 @@ class ChapterController {
       return res.status(error.statusCode || 500).json({
         error: true,
         message: 'Erro ao buscar capítulos',
+      });
+    }
+  }
+
+  async get(req, res) {
+    const { id } = req.query;
+
+    if (!id) {
+      return res.status(412).json({
+        error: true,
+        message: 'O ID do capítulo é obrigatório',
+      });
+    }
+
+    try {
+      const chapter = await Chapter.findByPk(id, {
+        include: 'module',
+      });
+
+      if (!chapter) {
+        return res.status(404).json({
+          error: true,
+          message: 'Capítulo não encontrado',
+        });
+      }
+
+      return res.status(200).json({
+        error: false,
+        data: chapter,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        error: true,
+        message: 'Erro ao recuperar capítulo',
       });
     }
   }

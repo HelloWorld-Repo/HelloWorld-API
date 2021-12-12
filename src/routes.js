@@ -21,9 +21,11 @@ routes.post('/register', UserController.register);
 routes.use(authMiddleware);
 
 routes.get('/modules', ModuleController.list);
+routes.get('/module', ModuleController.get);
 routes.get('/abstract', ModuleController.listWithQuestions);
 
 routes.get('/chapters', ChapterController.list);
+routes.get('/chapter', ChapterController.get);
 
 routes.post('/history', HistoryController.create);
 

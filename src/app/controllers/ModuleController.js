@@ -158,6 +158,51 @@ class ModuleController {
       });
     }
   }
+
+  async get(req, res) {
+    const { id } = req.query;
+
+    if (!id) {
+      return res.status(412).json({
+        error: true,
+        message: 'O ID do módulo é obrigatório',
+      });
+    }
+
+    try {
+      const module = await Module.findByPk(id, {
+        include: [
+          {
+            as: 'chapters',
+            model: Chapter,
+            include: [
+              {
+                model: Module,
+                as: 'module',
+              },
+            ],
+          },
+        ],
+      });
+
+      if (!module) {
+        return res.status(404).json({
+          error: true,
+          message: 'Módulo não encontrado',
+        });
+      }
+
+      return res.status(200).json({
+        error: false,
+        data: module,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        error: true,
+        message: `Erro ao recuperar módulo: ${error}`,
+      });
+    }
+  }
 }
 
 module.exports = new ModuleController();
