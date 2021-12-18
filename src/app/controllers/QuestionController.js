@@ -1,8 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 const Sequelize = require('sequelize');
-const {
-  Question, Option, Module, Chapter,
-} = require('../models');
+const { Question, Option, Module, Chapter } = require('../models');
 const { questionTypesEnum } = require('../enums');
 
 class QuestionController {
@@ -17,9 +15,14 @@ class QuestionController {
         });
       }
 
-      const question = await Question.create({
-        ...req.body,
-      });
+      const question = await Question.create(
+        {
+          ...req.body,
+        },
+        {
+          include: [{ model: Option, as: 'options' }],
+        }
+      );
 
       return res.status(200).json({
         error: false,
