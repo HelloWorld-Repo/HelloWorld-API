@@ -31,7 +31,7 @@ module.exports = {
         allowNull: false,
         required: true,
       },
-      chapterId: {
+      chapter_id: {
         type: Sequelize.INTEGER,
         required: true,
         allowNull: false,

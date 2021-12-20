@@ -72,7 +72,7 @@ class QuestionController {
   }
 
   async update(req, res) {
-    const { id, description } = req.body;
+    const { id, description, options, type } = req.body;
 
     if (!id) {
       return res.status(412).json({
@@ -82,7 +82,10 @@ class QuestionController {
     }
 
     try {
-      const question = await Question.findByPk(id);
+      const question = await Question.findOne({
+        where: { id },
+        include: { model: Option, as: 'options' },
+      });
 
       if (!question) {
         return res.status(404).json({
@@ -92,6 +95,12 @@ class QuestionController {
       }
 
       if (description) question.description = description;
+      if (type) question.type = type;
+      if (options) {
+        await Option.destroy({ where: { questionId: id } });
+        await Option.bulkCreate(options);
+      }
+
       await question.save();
 
       return res.status(200).json({
@@ -118,7 +127,24 @@ class QuestionController {
 
     try {
       const question = await Question.findByPk(id, {
-        include: 'options',
+        include: [
+          {
+            model: Option,
+            as: 'options',
+          },
+          {
+            model: Chapter,
+            as: 'chapter',
+            attributes: ['title', 'id'],
+            include: [
+              {
+                model: Module,
+                as: 'module',
+                attributes: ['title', 'id'],
+              },
+            ],
+          },
+        ],
       });
 
       if (!question) {

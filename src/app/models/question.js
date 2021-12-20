@@ -23,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       chapterId: {
         type: DataTypes.INTEGER,
+        field: 'chapter_id',
         required: true,
         allowNull: false,
         references: {
