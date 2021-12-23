@@ -1,19 +1,19 @@
-version: "3.1"
+version: '3.1'
 
 services:
   api:
     build: .
-    command: npm run dev
-    ports: 
-      - "3000:3000"
+    command: bash -c 'npx sequelize-cli db:migrate && npm run dev'
+    ports:
+      - '3000:3000'
     volumes:
       - .:/usr/api
       - /usr/api/node_modules
-  
+
   postgres:
     image: postgres:11.2-alpine
-    ports: 
-      - "5432:5432"
+    ports:
+      - '5432:5432'
     environment:
       POSTGRES_DB: helloworld
       POSTGRES_USER: postgres
