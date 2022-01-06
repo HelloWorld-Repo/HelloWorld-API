@@ -3,7 +3,7 @@ const routes = require('./routes');
 const cors = require('cors');
 
 const corsOptions = {
-  origin: 'http://localhost:3001',
+  origin: 'http://157.230.185.225:3001',
 };
 
 class AppController {
