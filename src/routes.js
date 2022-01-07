@@ -45,6 +45,8 @@ routes.use(adminMiddleware);
 
 routes.get('/users', UserController.list);
 
+routes.post('/admin', UserController.registerAdmin);
+
 routes.post('/module', ModuleController.create);
 routes.patch('/module', ModuleController.update);
 

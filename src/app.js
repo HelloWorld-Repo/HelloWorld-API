@@ -1,10 +1,6 @@
 const express = require('express');
-const routes = require('./routes');
 const cors = require('cors');
-
-const corsOptions = {
-  origin: 'http://157.230.185.225:3001',
-};
+const routes = require('./routes');
 
 class AppController {
   constructor() {
@@ -15,7 +11,7 @@ class AppController {
   }
 
   middlewares() {
-    this.express.use(cors(corsOptions));
+    this.express.use(cors());
     this.express.use(express.json());
   }
 
