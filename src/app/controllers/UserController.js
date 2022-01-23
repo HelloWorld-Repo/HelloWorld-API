@@ -67,10 +67,7 @@ class UserController {
   async registerAdmin(req, res) {
     try {
       if (!req.body?.password) {
-        return res.status(400).json({
-          error: true,
-          message: 'A senha não foi informada',
-        });
+        req.body.password = utils.generateRandomPassword();
       }
 
       const criptedPass = await bcrypt.hash(req.body.password, 8);
