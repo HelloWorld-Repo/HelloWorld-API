@@ -18,3 +18,10 @@ services:
       POSTGRES_DB: helloworld
       POSTGRES_USER: postgres
       POSTGRES_PASS: root
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    restart: always
+    ports:
+      - 1025:1025
+      - 8025:8025
