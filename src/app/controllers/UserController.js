@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs');
 
 const { User, Feedback, Class } = require('../models');
+const MailController = require('./MailController');
+const transport = require('../../config/mail');
 const utils = require('../../utils');
 
 class UserController {
@@ -21,6 +23,10 @@ class UserController {
         passwordHash: criptedPass,
         isAdmin: false,
       });
+
+      await transport.sendMail(
+        MailController.newRegister(user.email, user.name),
+      );
 
       return res.status(200).json({
         error: false,
@@ -78,6 +84,10 @@ class UserController {
         passwordHash: criptedPass,
         isAdmin: true,
       });
+
+      await transport.sendMail(
+        MailController.newAdminRegister(user.email, user.name),
+      );
 
       return res.status(200).json({
         error: false,
