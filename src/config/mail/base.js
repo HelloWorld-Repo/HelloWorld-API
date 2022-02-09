@@ -1,5 +1,5 @@
 const createEmail = (receiver, subject, message) => ({
-  from: 'helloworld.equipe@gmail.com',
+  from: 'Equipe HelloWorld <helloworld.equipe@gmail.com>',
   to: receiver,
   subject,
   html: `
