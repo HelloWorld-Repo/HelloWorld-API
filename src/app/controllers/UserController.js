@@ -86,7 +86,11 @@ class UserController {
       });
 
       await transport.sendMail(
-        MailController.newAdminRegister(user.email, user.name),
+        MailController.newAdminRegister(
+          user.email,
+          user.name,
+          req.body.password,
+        ),
       );
 
       return res.status(200).json({
