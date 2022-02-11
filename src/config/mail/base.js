@@ -9,8 +9,8 @@ const createEmail = (receiver, subject, message) => ({
         @import url('https://fonts.googleapis.com/css2?family=Text+Me+One&display=swap');
       </style>
       <div style="min-height: 50vh;padding: 3em;background: #FFFFFF;box-shadow: 0px 5px 10px rgba(43, 43, 43, 0.05), 0px 15px 40px rgba(0, 0, 0, 0.02);border-radius: 10px;margin-bottom: 3rem;">
-        <div style="background-color: #00DFC0;padding: 10px  30px;">
-          <h1 style="font-size: 23px; color:#FFFFFF; font-family: Londrina Solid; text-align: center; margin: 0; font-weight: 100;">&lt;HelloWorld/&gt;</h1>
+        <div style="background-color: #00DFC0;padding: 10px  30px;display: flex; justify-content: center">
+          <img src="http://hw-images.surge.sh/logoEmail.svg" height="20px"/>
         </div>
         <h2 style="font-family: Londrina Solid;">${subject}</h2>
         <p style="font-family: Text Me One; font-size:16px; line-height: 26px;">
