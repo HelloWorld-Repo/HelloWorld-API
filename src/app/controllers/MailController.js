@@ -36,6 +36,13 @@ class EmailController {
     return createEmail(to, subject, content);
   }
 
+  newPassword(to, name) {
+    const content = `Olá, ${name}! Sua senha acabou de ser alterada.<br/><br/>`;
+
+    const subject = 'Senha alterada com sucesso';
+    return createEmail(to, subject, content);
+  }
+
   courseConclusion(to, name) {
     const content = `Olá, ${name}!<br/><br/>
       Vimos que você finalizou toda a sua jornada no nosso aplicativo!<br/>

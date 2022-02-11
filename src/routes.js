@@ -33,6 +33,7 @@ routes.get('/feedbacks', authMiddleware, FeedbackController.list);
 
 routes.delete('/user', authMiddleware, UserController.delete);
 routes.patch('/user', authMiddleware, UserController.update);
+routes.post('/password', authMiddleware, UserController.newPassword);
 
 routes.get('/question', authMiddleware, QuestionController.get);
 routes.get(

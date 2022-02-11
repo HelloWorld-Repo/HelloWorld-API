@@ -261,13 +261,51 @@ class UserController {
         await user.save();
       }
 
-      return res.status(200).json({});
+      return res.status(200).json({
+        error: false,
+        data: {},
+      });
     } catch (error) {
       console.error('USER CONTROLLER', error);
       return res.status(501).json({
         error: true,
         message:
           'Ocorreu um erro ao recuperar a senha. Tente novamente mais tarde',
+      });
+    }
+  }
+
+  async newPassword(req, res) {
+    try {
+      const { userEmail } = req;
+      const { password } = req.body;
+
+      const user = await User.findByPk(userEmail);
+
+      if (user) {
+        user.passwordHash = await bcrypt.hash(password, 8);
+        user.resetPassword = false;
+
+        await user.save();
+        await transport.sendMail(
+          MailController.newPassword(userEmail, user.name),
+        );
+
+        return res.status(200).json({
+          error: false,
+          data: {},
+        });
+      }
+
+      return res.status(404).json({
+        error: true,
+        message: 'Usuário não encontrado',
+      });
+    } catch (error) {
+      console.error('USER CONTROLLER', error);
+      return res.status(501).json({
+        error: true,
+        message: 'Ocorreu um erro inesperado. Tente novamente mais tarde',
       });
     }
   }
