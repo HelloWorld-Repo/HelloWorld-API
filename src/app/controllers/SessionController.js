@@ -36,6 +36,7 @@ class SessionController {
             isAdmin: user.isAdmin,
             isStudent: user.isStudent,
             isFirstContact: user.isFirstContact,
+            resetPassword: user.resetPassword,
             level,
             askForFeedback,
           },
