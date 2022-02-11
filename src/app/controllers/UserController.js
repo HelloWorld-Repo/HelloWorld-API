@@ -242,6 +242,35 @@ class UserController {
       });
     }
   }
+
+  async resetPassword(req, res) {
+    try {
+      const { email } = req.body;
+
+      const user = await User.findByPk(email);
+
+      if (user) {
+        const password = utils.generateRandomPassword();
+
+        await transport.sendMail(
+          MailController.recoveryPassword(email, user.name, password),
+        );
+
+        user.resetPassword = true;
+        user.passwordHash = await bcrypt.hash(password, 8);
+        await user.save();
+      }
+
+      return res.status(200).json({});
+    } catch (error) {
+      console.error('USER CONTROLLER', error);
+      return res.status(501).json({
+        error: true,
+        message:
+          'Ocorreu um erro ao recuperar a senha. Tente novamente mais tarde',
+      });
+    }
+  }
 }
 
 module.exports = new UserController();

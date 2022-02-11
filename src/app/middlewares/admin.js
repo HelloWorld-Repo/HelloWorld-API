@@ -1,9 +1,9 @@
 const { User } = require('../models');
 
 module.exports = async (req, res, next) => {
-  const { userEmail } = req;
-
   try {
+    const { userEmail } = req;
+
     const user = await User.findOne({ where: { email: userEmail } });
 
     if (!user) {

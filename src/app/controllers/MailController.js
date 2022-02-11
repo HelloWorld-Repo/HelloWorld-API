@@ -12,7 +12,7 @@ class EmailController {
     const content = `Olá, ${name}!<br/>
       Seja muito bem vind@ ao <strong>HelloWorld</strong>, um aplicativo para você aprender lógica de programação <strong>gratuitamente</strong> e <strong>em português</strong>!<br/><br/>
       Você foi cadastrado como administrador e pode acessar a plataforma de gerenciamento através do link <a href="https://helloworld.gq">helloworld.gq</a>
-      Sua senha de acesso temporário é <br/><br/><span style="font-weight: 700; margin: auto;display: table;">${pass}</span><br/><br/>`;
+      Sua senha de acesso é <br/><br/><span style="font-weight: 700; margin: auto;display: table;">${pass}</span><br/><br/>`;
 
     const subject = 'Seja bem vind@!';
     return createEmail(to, subject, content);
@@ -21,7 +21,7 @@ class EmailController {
   newImportRegister(to, name, pass) {
     const content = `Olá, ${name}!<br/>
       Seja muito bem vind@ ao <strong>HelloWorld</strong>, um aplicativo para você aprender lógica de programação <strong>gratuitamente</strong> e <strong>em português</strong>!<br/><br/>
-      Sua senha de acesso temporário é <br/><br/><span style="font-weight: 700; margin: auto;display: table;">${pass}</span><br/><br/>`;
+      Sua senha de acesso temporário está logo abaixo. <strong>Você deverá criar uma nova senha no próximo acesso ao aplicativo.</strong>  <br/><br/><span style="font-weight: 700; margin: auto;display: table;">${pass}</span><br/><br/>`;
     const subject = 'Seja bem vind@!';
     return createEmail(to, subject, content);
   }

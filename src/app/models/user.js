@@ -35,6 +35,13 @@ module.exports = (sequelize, DataTypes) => {
         field: 'is_first_contact',
         type: DataTypes.BOOLEAN,
       },
+      resetPassword: {
+        field: 'reset_pass',
+        type: DataTypes.BOOLEAN,
+        required: true,
+        allowNull: false,
+        defaultValue: false,
+      },
       createdAt: {
         field: 'created_at',
         type: DataTypes.DATE,
@@ -56,7 +63,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       tableName: 'USER',
-    }
+    },
   );
 
   User.associate = (models) => {

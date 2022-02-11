@@ -16,52 +16,101 @@ const ClassController = require('./app/controllers/ClassController');
 
 routes.post('/login', SessionController.login);
 routes.post('/register', UserController.register);
+routes.post('/reset', UserController.resetPassword);
 
 // These Routes needs sample athentication
-routes.use(authMiddleware);
+routes.get('/modules', authMiddleware, ModuleController.list);
+routes.get('/module', authMiddleware, ModuleController.get);
+routes.get('/abstract', authMiddleware, ModuleController.listWithQuestions);
 
-routes.get('/modules', ModuleController.list);
-routes.get('/module', ModuleController.get);
-routes.get('/abstract', ModuleController.listWithQuestions);
+routes.get('/chapters', authMiddleware, ChapterController.list);
+routes.get('/chapter', authMiddleware, ChapterController.get);
 
-routes.get('/chapters', ChapterController.list);
-routes.get('/chapter', ChapterController.get);
+routes.post('/history', authMiddleware, HistoryController.create);
 
-routes.post('/history', HistoryController.create);
+routes.post('/feedback', authMiddleware, FeedbackController.updateOrCreate);
+routes.get('/feedbacks', authMiddleware, FeedbackController.list);
 
-routes.post('/feedback', FeedbackController.updateOrCreate);
-routes.get('/feedbacks', FeedbackController.list);
+routes.delete('/user', authMiddleware, UserController.delete);
+routes.patch('/user', authMiddleware, UserController.update);
 
-routes.delete('/user', UserController.delete);
-routes.patch('/user', UserController.update);
+routes.get('/question', authMiddleware, QuestionController.get);
+routes.get(
+  '/questions',
+  authMiddleware,
+  QuestionController.getQuestionsFromChapter,
+);
 
-routes.get('/question', QuestionController.get);
-routes.get('/questions', QuestionController.getQuestionsFromChapter);
-
-routes.post('/answer', AnswerController.updateOrCreate);
+routes.post('/answer', authMiddleware, AnswerController.updateOrCreate);
 
 // These Routes needs admin athentication
-routes.use(adminMiddleware);
+routes.get('/users', [authMiddleware, adminMiddleware], UserController.list);
 
-routes.get('/users', UserController.list);
+routes.post(
+  '/admin',
+  [authMiddleware, adminMiddleware],
+  UserController.registerAdmin,
+);
 
-routes.post('/admin', UserController.registerAdmin);
+routes.post(
+  '/module',
+  [authMiddleware, adminMiddleware],
+  ModuleController.create,
+);
+routes.patch(
+  '/module',
+  [authMiddleware, adminMiddleware],
+  ModuleController.update,
+);
 
-routes.post('/module', ModuleController.create);
-routes.patch('/module', ModuleController.update);
+routes.post(
+  '/chapter',
+  [authMiddleware, adminMiddleware],
+  ChapterController.create,
+);
+routes.patch(
+  '/chapter',
+  [authMiddleware, adminMiddleware],
+  ChapterController.update,
+);
 
-routes.post('/chapter', ChapterController.create);
-routes.patch('/chapter', ChapterController.update);
+routes.post(
+  '/question',
+  [authMiddleware, adminMiddleware],
+  QuestionController.create,
+);
+routes.patch(
+  '/question',
+  [authMiddleware, adminMiddleware],
+  QuestionController.update,
+);
 
-routes.post('/question', QuestionController.create);
-routes.patch('/question', QuestionController.update);
+routes.post(
+  '/option',
+  [authMiddleware, adminMiddleware],
+  OptionController.create,
+);
+routes.patch(
+  '/option',
+  [authMiddleware, adminMiddleware],
+  OptionController.update,
+);
 
-routes.post('/option', OptionController.create);
-routes.patch('/option', OptionController.update);
-
-routes.post('/class', ClassController.create);
-routes.patch('/class', ClassController.update);
-routes.delete('/class', ClassController.delete);
-routes.get('/classes', ClassController.list);
+routes.post(
+  '/class',
+  [authMiddleware, adminMiddleware],
+  ClassController.create,
+);
+routes.patch(
+  '/class',
+  [authMiddleware, adminMiddleware],
+  ClassController.update,
+);
+routes.delete(
+  '/class',
+  [authMiddleware, adminMiddleware],
+  ClassController.delete,
+);
+routes.get('/classes', [authMiddleware, adminMiddleware], ClassController.list);
 
 module.exports = routes;
