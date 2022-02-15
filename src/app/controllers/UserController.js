@@ -4,6 +4,7 @@ const { User, Feedback, Class } = require('../models');
 const MailController = require('./MailController');
 const transport = require('../../config/mail');
 const utils = require('../../utils');
+const HistoryController = require('./HistoryController');
 
 class UserController {
   async register(req, res) {
@@ -25,7 +26,7 @@ class UserController {
       });
 
       await transport.sendMail(
-        MailController.newRegister(user.email, user.name),
+        MailController.newRegister(user.email, user.name)
       );
 
       return res.status(200).json({
@@ -39,6 +40,7 @@ class UserController {
           isFirstContact: user.isFirstContact,
           level: user.level,
           classId: user.classId,
+          researchParticipant: user.researchParticipant,
         },
       });
     } catch (error) {
@@ -89,8 +91,8 @@ class UserController {
         MailController.newAdminRegister(
           user.email,
           user.name,
-          req.body.password,
-        ),
+          req.body.password
+        )
       );
 
       return res.status(200).json({
@@ -104,6 +106,7 @@ class UserController {
           isFirstContact: user.isFirstContact,
           level: user.level,
           classId: user.classId,
+          researchParticipant: user.researchParticipant,
         },
       });
     } catch (error) {
@@ -163,13 +166,7 @@ class UserController {
   }
 
   async update(req, res) {
-    const {
-      birthday,
-      name,
-      level,
-      classId,
-      userEmail: userFromBody,
-    } = req.body;
+    const { birthday, name, classId, userEmail: userFromBody } = req.body;
 
     let { userEmail } = req;
 
@@ -189,13 +186,16 @@ class UserController {
 
       if (birthday) user.birthday = birthday;
       if (name) user.name = name;
-      if (level) user.level = level;
       if (classId) user.classId = classId;
 
       await user.save();
+      const level = await HistoryController.getChaptersCompletedCount(
+        user?.email
+      );
+
       return res.status(200).json({
         error: false,
-        data: { user: user.toJSON() },
+        data: { ...user, level },
       });
     } catch (error) {
       console.error(error);
@@ -253,7 +253,7 @@ class UserController {
         const password = utils.generateRandomPassword();
 
         await transport.sendMail(
-          MailController.recoveryPassword(email, user.name, password),
+          MailController.recoveryPassword(email, user.name, password)
         );
 
         user.resetPassword = true;
@@ -288,7 +288,7 @@ class UserController {
 
         await user.save();
         await transport.sendMail(
-          MailController.newPassword(userEmail, user.name),
+          MailController.newPassword(userEmail, user.name)
         );
 
         return res.status(200).json({
