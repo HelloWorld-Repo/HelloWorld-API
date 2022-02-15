@@ -150,7 +150,7 @@ class UserController {
       await user.destroy();
       return res.status(200).json({
         error: false,
-        data: { user: user.toJSON() },
+        data: user,
       });
     } catch (error) {
       console.error(error);
