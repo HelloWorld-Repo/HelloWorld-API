@@ -321,6 +321,9 @@ class UserController {
       '/tmp/files/',
       req.file.filename,
     );
+
+    const classId = req?.body?.classId;
+
     try {
       if (!req.file) {
         return res.status(400).json({
@@ -346,6 +349,7 @@ class UserController {
             passwordHash,
             resetPassword: true,
             isAdmin: false,
+            classId,
           })
             .then(async (user) => {
               success.push(row[0]);
