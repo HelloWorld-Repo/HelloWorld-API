@@ -3,11 +3,14 @@ const path = require('path');
 const readXlsxFile = require('read-excel-file/node');
 const { unlink } = require('fs/promises');
 
+const Sequelize = require('sequelize');
 const { User, Feedback, Class } = require('../models');
 const MailController = require('./MailController');
 const transport = require('../../config/mail');
 const utils = require('../../utils');
 const HistoryController = require('./HistoryController');
+
+const { Op } = Sequelize;
 
 class UserController {
   async register(req, res) {
@@ -226,6 +229,11 @@ class UserController {
   async list(req, res) {
     try {
       const students = await User.findAll({
+        where: {
+          classId: {
+            [Op.not]: null,
+          },
+        },
         include: [
           {
             model: Class,
