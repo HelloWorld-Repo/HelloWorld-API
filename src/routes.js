@@ -2,6 +2,7 @@ const routes = require('express').Router();
 
 const authMiddleware = require('./app/middlewares/auth');
 const adminMiddleware = require('./app/middlewares/admin');
+const fileMiddleware = require('./app/middlewares/file');
 
 const SessionController = require('./app/controllers/SessionController');
 const UserController = require('./app/controllers/UserController');
@@ -46,6 +47,11 @@ routes.post('/answer', authMiddleware, AnswerController.updateOrCreate);
 
 // These Routes needs admin athentication
 routes.get('/users', [authMiddleware, adminMiddleware], UserController.list);
+routes.post(
+  '/users/import',
+  [authMiddleware, adminMiddleware, fileMiddleware.single('file')],
+  UserController.import,
+);
 
 routes.post(
   '/admin',

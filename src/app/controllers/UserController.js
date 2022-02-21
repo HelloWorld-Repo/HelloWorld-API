@@ -1,4 +1,7 @@
 const bcrypt = require('bcryptjs');
+const path = require('path');
+const readXlsxFile = require('read-excel-file/node');
+const { unlink } = require('fs/promises');
 
 const { User, Feedback, Class } = require('../models');
 const MailController = require('./MailController');
@@ -26,7 +29,7 @@ class UserController {
       });
 
       await transport.sendMail(
-        MailController.newRegister(user.email, user.name)
+        MailController.newRegister(user.email, user.name),
       );
 
       return res.status(200).json({
@@ -91,8 +94,8 @@ class UserController {
         MailController.newAdminRegister(
           user.email,
           user.name,
-          req.body.password
-        )
+          req.body.password,
+        ),
       );
 
       return res.status(200).json({
@@ -166,7 +169,9 @@ class UserController {
   }
 
   async update(req, res) {
-    const { birthday, name, classId, userEmail: userFromBody } = req.body;
+    const {
+      birthday, name, classId, userEmail: userFromBody,
+    } = req.body;
 
     let { userEmail } = req;
 
@@ -190,7 +195,7 @@ class UserController {
 
       await user.save();
       const level = await HistoryController.getChaptersCompletedCount(
-        user?.email
+        user?.email,
       );
 
       return res.status(200).json({
@@ -253,7 +258,7 @@ class UserController {
         const password = utils.generateRandomPassword();
 
         await transport.sendMail(
-          MailController.recoveryPassword(email, user.name, password)
+          MailController.recoveryPassword(email, user.name, password),
         );
 
         user.resetPassword = true;
@@ -288,7 +293,7 @@ class UserController {
 
         await user.save();
         await transport.sendMail(
-          MailController.newPassword(userEmail, user.name)
+          MailController.newPassword(userEmail, user.name),
         );
 
         return res.status(200).json({
@@ -307,6 +312,69 @@ class UserController {
         error: true,
         message: 'Ocorreu um erro inesperado. Tente novamente mais tarde',
       });
+    }
+  }
+
+  async import(req, res) {
+    const pathname = path.join(
+      `${__dirname}/../../..`,
+      '/tmp/files/',
+      req.file.filename,
+    );
+    try {
+      if (!req.file) {
+        return res.status(400).json({
+          error: true,
+          message: 'Insira um arquivo para continuar',
+        });
+      }
+
+      const rows = await readXlsxFile(pathname);
+
+      rows.shift();
+      const success = [];
+      const errors = [];
+
+      await Promise.all(
+        rows.map(async (row) => {
+          const password = utils.generateRandomPassword();
+          const passwordHash = await bcrypt.hash(password, 8);
+
+          await User.create({
+            name: row[0],
+            email: row[1],
+            passwordHash,
+            resetPassword: true,
+            isAdmin: false,
+          })
+            .then(async (user) => {
+              success.push(row[0]);
+              await transport.sendMail(
+                MailController.newImportRegister(
+                  user.email,
+                  user.name,
+                  password,
+                ),
+              );
+            })
+            .catch((error) => {
+              errors.push({
+                user: row[0],
+                error: error?.errors[0].message,
+              });
+            });
+        }),
+      );
+
+      return res.status(200).json({ error: false, data: { errors } });
+    } catch (error) {
+      console.error('USER CONTROLLER', error);
+      return res.status(501).json({
+        error: true,
+        message: 'Ocorreu um erro inesperado. Tente novamente mais tarde',
+      });
+    } finally {
+      unlink(pathname);
     }
   }
 }
