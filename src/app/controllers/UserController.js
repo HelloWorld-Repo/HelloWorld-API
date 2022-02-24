@@ -173,7 +173,11 @@ class UserController {
 
   async update(req, res) {
     const {
-      birthday, name, classId, userEmail: userFromBody,
+      birthday,
+      name,
+      classId,
+      resetPassword,
+      userEmail: userFromBody,
     } = req.body;
 
     let { userEmail } = req;
@@ -195,6 +199,7 @@ class UserController {
       if (birthday) user.birthday = birthday;
       if (name) user.name = name;
       if (classId) user.classId = classId;
+      if (resetPassword) user.resetPassword = resetPassword;
 
       await user.save();
       const level = await HistoryController.getChaptersCompletedCount(
