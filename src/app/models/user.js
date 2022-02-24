@@ -12,7 +12,11 @@ module.exports = (sequelize, DataTypes) => {
         isEmail: true,
         unique: true,
       },
-      name: DataTypes.STRING,
+      name: {
+        type: DataTypes.STRING,
+        required: true,
+        allowNull: false,
+      },
       level: DataTypes.VIRTUAL,
       birthday: DataTypes.DATEONLY,
       passwordHash: {
@@ -63,7 +67,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       tableName: 'USER',
-    },
+    }
   );
 
   User.associate = (models) => {

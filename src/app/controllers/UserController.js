@@ -177,6 +177,9 @@ class UserController {
       name,
       classId,
       resetPassword,
+      password,
+      researchParticipant,
+      isFirstContact,
       userEmail: userFromBody,
     } = req.body;
 
@@ -199,7 +202,10 @@ class UserController {
       if (birthday) user.birthday = birthday;
       if (name) user.name = name;
       if (classId) user.classId = classId;
+      if (password) user.passwordHash = await bcrypt.hash(req.body.password, 8);
       if (resetPassword) user.resetPassword = resetPassword;
+      if (researchParticipant) user.researchParticipant = researchParticipant;
+      if (isFirstContact) user.isFirstContact = isFirstContact;
 
       await user.save();
       const level = await HistoryController.getChaptersCompletedCount(
