@@ -25,9 +25,9 @@ module.exports = async (req, res, next) => {
 
     req.userEmail = decoded.id;
   } catch (error) {
-    return res.status(401).json({
+    return res.status(500).json({
       error: true,
-      message: 'Usuário não autenticado',
+      message: 'Erro desconhecido',
     });
   }
 

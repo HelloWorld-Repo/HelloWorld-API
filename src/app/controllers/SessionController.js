@@ -9,17 +9,10 @@ class SessionController {
     try {
       const user = await User.findOne({ where: { email } });
 
-      if (!user) {
-        return res.status(401).json({
-          error: true,
-          message: 'E-mail não cadastrado',
-        });
-      }
-
       if (!(await user.checkPassword(password))) {
-        return res.status(401).json({
+        return res.status(404).json({
           error: true,
-          message: 'Senha incorreta',
+          message: 'E-mail ou senha incorretos',
         });
       }
 
@@ -49,8 +42,6 @@ class SessionController {
         message: error.message,
       });
     }
-
-    // TODO: recuperar nível do usuário
   }
 }
 
