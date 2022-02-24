@@ -9,7 +9,7 @@ class SessionController {
     try {
       const user = await User.findOne({ where: { email } });
 
-      if (!(await User.checkPassword(password))) {
+      if (!(await user?.checkPassword(password))) {
         return res.status(404).json({
           error: true,
           message: 'E-mail ou senha incorretos',
