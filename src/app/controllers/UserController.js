@@ -157,6 +157,9 @@ class UserController {
       }
 
       await user.destroy();
+
+      await transport.sendMail(MailController.deletedAccount(userEmail, user.name));
+
       return res.status(200).json({
         error: false,
         data: user,

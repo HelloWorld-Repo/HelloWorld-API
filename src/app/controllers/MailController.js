@@ -53,6 +53,17 @@ class EmailController {
     const subject = 'Isso é só o começo!';
     return createEmail(to, subject, content);
   }
+
+  deletedAccount(to, name) {
+    const content = `Olá, ${name}!<br/><br/>
+      Infelizmente é aqui que nos despedimos (por enquanto). 
+      Por favor, responda esse e-mail informando qual o motivo de ter deletado a sua conta.
+      Obrigada!
+    `;
+
+    const subject = 'Conta deletada';
+    return createEmail(to, subject, content);
+  }
 }
 
 module.exports = new EmailController();
