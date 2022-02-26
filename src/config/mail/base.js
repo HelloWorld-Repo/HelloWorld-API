@@ -1,7 +1,7 @@
 const createEmail = (receiver, subject, message) => ({
   from: 'Equipe HelloWorld <helloworld.equipe@gmail.com>',
   to: receiver,
-  subject,
+  subject: `HelloWorld | ${subject}`,
   html: `
     <body style="background-color: #F5F5F5;">
       <style>
