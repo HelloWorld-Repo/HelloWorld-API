@@ -180,14 +180,10 @@ class UserController {
       password,
       researchParticipant,
       isFirstContact,
-      userEmail: userFromBody,
+      userEmail: userEmailFromBody,
     } = req.body;
 
-    let { userEmail } = req;
-
-    if (!userEmail) {
-      userEmail = userFromBody;
-    }
+    const userEmail = userEmailFromBody || req.userEmail;
 
     try {
       const user = await User.findOne({ where: { email: userEmail } });
@@ -203,9 +199,9 @@ class UserController {
       if (name) user.name = name;
       if (classId) user.classId = classId;
       if (password) user.passwordHash = await bcrypt.hash(req.body.password, 8);
-      if (resetPassword) user.resetPassword = resetPassword;
-      if (researchParticipant) user.researchParticipant = researchParticipant;
-      if (isFirstContact) user.isFirstContact = isFirstContact;
+      if (resetPassword !== undefined) user.resetPassword = resetPassword;
+      if (researchParticipant !== undefined) { user.researchParticipant = researchParticipant; }
+      if (isFirstContact !== undefined) user.isFirstContact = isFirstContact;
 
       await user.save();
       const level = await HistoryController.getChaptersCompletedCount(
@@ -217,11 +213,17 @@ class UserController {
         data: { ...user, level },
       });
     } catch (error) {
-      console.error(error);
+      if (error.name === 'SequelizeForeignKeyConstraintError') {
+        console.error(error);
+        return res.status(404).json({
+          error: true,
+          message: 'Essa turma não existe',
+        });
+      }
       return res.status(500).json({
         error: true,
         message:
-          'Ocorreu um erro ao remover o usuário, tente nvamente mais tarde',
+          'Ocorreu um erro ao atualizar o usuário, tente novamente mais tarde',
       });
     }
   }
