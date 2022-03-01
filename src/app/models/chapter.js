@@ -38,6 +38,15 @@ module.exports = (sequelize, DataTypes) => {
       done: {
         type: DataTypes.VIRTUAL,
       },
+      usersCount: {
+        type: DataTypes.VIRTUAL,
+      },
+      rightResponsesCount: {
+        type: DataTypes.VIRTUAL,
+      },
+      wrongResponsesCount: {
+        type: DataTypes.VIRTUAL,
+      },
     },
     {
       tableName: 'CHAPTER',

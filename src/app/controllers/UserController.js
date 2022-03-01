@@ -32,7 +32,7 @@ class UserController {
       });
 
       await transport.sendMail(
-        MailController.newRegister(user.email, user.name),
+        MailController.newRegister(user.email, user.name)
       );
 
       return res.status(200).json({
@@ -97,8 +97,8 @@ class UserController {
         MailController.newAdminRegister(
           user.email,
           user.name,
-          req.body.password,
-        ),
+          req.body.password
+        )
       );
 
       return res.status(200).json({
@@ -158,7 +158,9 @@ class UserController {
 
       await user.destroy();
 
-      await transport.sendMail(MailController.deletedAccount(userEmail, user.name));
+      await transport.sendMail(
+        MailController.deletedAccount(userEmail, user.name)
+      );
 
       return res.status(200).json({
         error: false,
@@ -203,12 +205,14 @@ class UserController {
       if (classId) user.classId = classId;
       if (password) user.passwordHash = await bcrypt.hash(req.body.password, 8);
       if (resetPassword !== undefined) user.resetPassword = resetPassword;
-      if (researchParticipant !== undefined) { user.researchParticipant = researchParticipant; }
+      if (researchParticipant !== undefined) {
+        user.researchParticipant = researchParticipant;
+      }
       if (isFirstContact !== undefined) user.isFirstContact = isFirstContact;
 
       await user.save();
       const level = await HistoryController.getChaptersCompletedCount(
-        user?.email,
+        user?.email
       );
 
       return res.status(200).json({
@@ -242,7 +246,7 @@ class UserController {
     return utils.getIntervalBetweenDates(feedback?.updatedAt, Date.now()) > 30;
   }
 
-  async list(req, res) {
+  async list(_req, res) {
     try {
       const students = await User.findAll({
         where: {
@@ -259,6 +263,14 @@ class UserController {
         order: ['name'],
       });
 
+      await Promise.all(
+        students.map(async (student) => {
+          student.level =
+            (await HistoryController.getChaptersCompletedCount(
+              student.email
+            ));
+        })
+      );
       return res.status(200).json({
         error: false,
         data: students,
@@ -282,7 +294,7 @@ class UserController {
         const password = utils.generateRandomPassword();
 
         await transport.sendMail(
-          MailController.recoveryPassword(email, user.name, password),
+          MailController.recoveryPassword(email, user.name, password)
         );
 
         user.resetPassword = true;
@@ -317,7 +329,7 @@ class UserController {
 
         await user.save();
         await transport.sendMail(
-          MailController.newPassword(userEmail, user.name),
+          MailController.newPassword(userEmail, user.name)
         );
 
         return res.status(200).json({
@@ -343,7 +355,7 @@ class UserController {
     const pathname = path.join(
       `${__dirname}/../../..`,
       '/tmp/files/',
-      req.file.filename,
+      req.file.filename
     );
 
     const classId = req?.body?.classId;
@@ -381,8 +393,8 @@ class UserController {
                 MailController.newImportRegister(
                   user.email,
                   user.name,
-                  password,
-                ),
+                  password
+                )
               );
             })
             .catch((error) => {
@@ -391,7 +403,7 @@ class UserController {
                 error: error?.errors[0].message,
               });
             });
-        }),
+        })
       );
 
       return res.status(200).json({ error: false, data: { errors } });
