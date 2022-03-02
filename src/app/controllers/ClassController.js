@@ -1,6 +1,7 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
 const { Class, User } = require('../models');
+const HistoryController = require('./HistoryController');
 
 class ClassController {
   async create(req, res) {
@@ -71,11 +72,31 @@ class ClassController {
           {
             model: User,
             as: 'users',
-            attributes: ['name', 'email', 'is_admin'],
+            attributes: [
+              'name',
+              'email',
+              'is_admin',
+              'level',
+              'birthday',
+              'createdAt',
+              'updatedAt',
+            ],
           },
         ],
         order: ['created_at'],
       });
+
+      await Promise.all(
+        classes.map(async (classItem) => {
+          await Promise.all(
+            classItem?.users?.map(async (user) => {
+              user.level = await HistoryController.getChaptersCompletedCount(
+                user.email
+              );
+            })
+          );
+        })
+      );
 
       return res.status(200).json({
         error: false,
