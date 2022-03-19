@@ -25,6 +25,13 @@ module.exports = async (req, res, next) => {
 
     req.userEmail = decoded.id;
   } catch (error) {
+    if(error?.name === 'TokenExpiredError'){
+      return res.status(401).json({
+        error: true,
+        message: 'Token expirado',
+      });
+    }
+
     return res.status(500).json({
       error: true,
       message: 'Erro desconhecido',

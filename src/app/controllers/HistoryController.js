@@ -54,9 +54,20 @@ class HistoryController {
   }
 
   async getChaptersCompletedCount(userEmail) {
-    const count = History.count({
+    const count = await History.count({
       where: {
         userEmail,
+      },
+    });
+
+
+    return count;
+  }
+
+  async getUsersByChapter(chapterId) {
+    const count = await History.count({
+      where: {
+        chapterId
       },
     });
 

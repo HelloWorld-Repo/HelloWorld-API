@@ -146,6 +146,26 @@ class AnswerController {
 
     return questions;
   }
+
+  async getResponsesByChapter(chapterId, correctedAnswer) {
+    const answers = await Answer.count({
+      where: {
+        '$question.chapter.id$': chapterId,
+        correctedAnswer,
+      },
+      include: {
+        model: Question,
+        as: 'question',
+        include: {
+          model: Chapter,
+          as: 'chapter',
+          attributes: ['id'],
+        },
+      },
+    });
+
+    return answers;
+  }
 }
 
 module.exports = new AnswerController();

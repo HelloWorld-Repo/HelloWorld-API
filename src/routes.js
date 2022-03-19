@@ -14,6 +14,7 @@ const QuestionController = require('./app/controllers/QuestionController');
 const OptionController = require('./app/controllers/OptionController');
 const AnswerController = require('./app/controllers/AnswerController');
 const ClassController = require('./app/controllers/ClassController');
+const ResultController = require('./app/controllers/ResultController');
 
 routes.post('/login', SessionController.login);
 routes.post('/register', UserController.register);
@@ -118,6 +119,8 @@ routes.delete(
   [authMiddleware, adminMiddleware],
   ClassController.delete,
 );
+
 routes.get('/classes', [authMiddleware, adminMiddleware], ClassController.list);
+routes.get('/result', [authMiddleware, adminMiddleware], ResultController.get);
 
 module.exports = routes;
