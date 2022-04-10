@@ -212,7 +212,7 @@ class UserController {
 
       await user.save();
       const level = await HistoryController.getChaptersCompletedCount(
-        user?.email
+        userEmail
       );
 
       return res.status(200).json({

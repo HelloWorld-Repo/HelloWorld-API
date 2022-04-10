@@ -3,7 +3,7 @@ name: Production Continuous Delivery
 on:
   push:
     branches: 
-      - development
+      - master
 
 jobs:
   docker-build-push:
@@ -48,5 +48,3 @@ jobs:
             docker login docker.pkg.github.com -u $GITHUB_USERNAME -p $GITHUB_TOKEN
             docker pull docker.pkg.github.com/helloworld-repo/helloworld-api/server:latest
             docker-compose -f docker-compose.prod.yml up -d
-
-
