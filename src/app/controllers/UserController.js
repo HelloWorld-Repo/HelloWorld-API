@@ -217,7 +217,17 @@ class UserController {
 
       return res.status(200).json({
         error: false,
-        data: { ...user, level },
+        data: {
+          level,
+          email: user.email,
+          name: user.name,
+          birthday: user.birthday,
+          isAdmin: user.isAdmin,
+          isStudent: user.isStudent,
+          isFirstContact: user.isFirstContact,
+          classId: user.classId,
+          researchParticipant: user.researchParticipant,
+        },
       });
     } catch (error) {
       if (error.name === 'SequelizeForeignKeyConstraintError') {
@@ -265,10 +275,9 @@ class UserController {
 
       await Promise.all(
         students.map(async (student) => {
-          student.level =
-            (await HistoryController.getChaptersCompletedCount(
-              student.email
-            ));
+          student.level = await HistoryController.getChaptersCompletedCount(
+            student.email
+          );
         })
       );
       return res.status(200).json({
