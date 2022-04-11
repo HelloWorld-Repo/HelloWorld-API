@@ -26,7 +26,7 @@ jobs:
         with:
           push: true
           tags: |
-            ghcr.io/helloworld-repo/helloworld-api/server:latest
+            ghcr.io/helloworld-repo/server:latest
 
   deploy:
     name: Deploy package to DigitalOcean 
@@ -46,5 +46,5 @@ jobs:
           script: |
             cd hello-world
             docker login ghcr.io -u $GITHUB_USERNAME -p $GITHUB_TOKEN
-            docker pull ghcr.io/helloworld-repo/helloworld-api/server:latest
+            docker pull ghcr.io/helloworld-repo/server:latest
             docker-compose -f docker-compose.prod.yml up -d
